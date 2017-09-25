@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/iamnapo/CallByMeaning.git"
+    "url": "https://github.com/iamnapo/CallByMeaning.git"
   },
   "author": "Napoleon-Christos Oikonomou",
   "license": "AGPL-3.0",
@@ -21,6 +21,7 @@
     "express": "^4.15.4",
     "method-override": "^2.3.9",
     "mongoose": "^4.11.12",
-    "morgan": "^1.8.2"
+    "morgan": "^1.8.2",
+    "pug": "^2.0.0-rc.4"
   }
 }
