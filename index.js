@@ -6,6 +6,7 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var methodOverride = require('method-override');
 var morgan = require('morgan');
+var chalk = require('chalk');
 
 var port = process.env.PORT || 3000;
 
@@ -29,5 +30,5 @@ var getByMeaning = require('./app/routes/getByMeaningRoutes');
 app.use('/gbm', getByMeaning);
 
 var server = app.listen(port, function () {
-  console.log('Server has started at http://localhost:%s.', server.address().port);
+  console.log('Server has started at http://localhost:%s. ' + chalk.magenta('Have fun :)'), server.address().port);
 });
