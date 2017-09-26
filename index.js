@@ -1,3 +1,5 @@
+'use strict';
+
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
@@ -16,8 +18,16 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 app.use(methodOverride('_method'));
+app.use(express.static(__dirname + '/library'));
+app.use('/docs', express.static(__dirname + '/app/docs'));
 app.use(morgan('dev'));
 
+var getByName = require('./app/routes/getByNameRoutes');
+app.use('/', getByName);
+
+var getByMeaning = require('./app/routes/getByMeaningRoutes');
+app.use('/gbm', getByMeaning);
+
 var server = app.listen(port, function () {
-  console.log('Server has started at port %s!', server.address().port);
+  console.log('Server has started at http://localhost:%s.', server.address().port);
 });

@@ -91,7 +91,7 @@ function fixNodes() {
         if (err) {
           console.log(err);
         } else {
-          node.func_res.push({id: func._id, unitType: 'seconds'});
+          node.func_res.push({id: func._id, name: func.name, unitType: 'seconds'});
           node.save();
         }
       });
@@ -105,7 +105,7 @@ function fixNodes() {
         if (err) {
           console.log(err);
         } else {
-          node.func_res.push({id: func._id, unitType: 'seconds'});
+          node.func_res.push({id: func._id, name: func.name, unitType: 'seconds'});
           node.save();
         }
       });
@@ -121,7 +121,7 @@ function fixNodes() {
         if (err) {
           console.log(err);
         } else {
-          node.func_arg.push({id: func._id, unitType: 'date'});
+          node.func_arg.push({id: func._id, name: func.name, unitType: 'date'});
           node.save();
         }
       });
@@ -135,7 +135,7 @@ function fixNodes() {
         if (err) {
           console.log(err);
         } else {
-          node.func_arg.push({id: func._id, unitType: 'date'});
+          node.func_arg.push({id: func._id, name: func.name, unitType: 'date'});
           node.save();
         }
       });
@@ -151,7 +151,7 @@ function fixNodes() {
         if (err) {
           console.log(err);
         } else {
-          node.func_res.push({id: func._id, unitType: 'word'});
+          node.func_res.push({id: func._id, name: func.name, unitType: 'word'});
           node.save();
         }
       });

@@ -1,3 +1,5 @@
+'use strict';
+
 var mongoose = require('mongoose');
 
 var nodeSchema = new mongoose.Schema({
@@ -12,6 +14,7 @@ var nodeSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Function'
     },
+    name: String,
     unitType: String
   }],
   func_res: [{
@@ -19,6 +22,7 @@ var nodeSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Function'
     },
+    name: String,
     unitType: String
   }]
 });
