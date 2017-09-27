@@ -21,7 +21,7 @@ router.get('/c/:node', function(req, res) {
       console.log(err);
     } else {
       if (!node) {
-        res.send('Node not found in DB.');
+        res.status(418).send('Node not found in DB.');
       } else {
         res.json(node);        
       }
@@ -39,7 +39,7 @@ router.get('/f/:func', function(req, res) {
       console.log(err);
     } else {
       if (!func) {
-        res.send('Function not found in DB');
+        res.status(418).send('Function not found in DB');
       } else {
         res.json(func);
       }
@@ -57,7 +57,7 @@ router.get('/r/:rel', function(req, res) {
       console.log(err);
     } else {
       if (!rel) {
-        res.send('Relation not found in DB');
+        res.status(418).send('Relation not found in DB');
       } else {
         res.json(rel);
       }

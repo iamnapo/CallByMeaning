@@ -10,17 +10,19 @@ var functionSchema = new mongoose.Schema({
   desc: String,
   codeFile: {
     type: String,
-    default: 'default.js'
+    default: './js/default.js'
   },
   args: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Node'
   }],
-  results: [{
+  returns: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Node'
   }],
+  argsNames: [],
   argsUnits: [],
+  returnsNames: [],
   returnsUnits: []
 });
 

@@ -170,7 +170,10 @@ function fixFunctions() {
         if (err) {
           console.log(err);
         } else {
-          func.results.push(node._id);
+          func.returns.push(node._id);
+          func.returnsNames.push(node.name);
+          func.save();
+          func.returnsNames = func.returnsNames.sort();
           func.save();
         }
       });
@@ -186,7 +189,11 @@ function fixFunctions() {
         if (err) {
           console.log(err);
         } else {
-          func.results.push(node._id);
+          func.returns.push(node._id);
+          let temp = func.returnsNames;
+          temp.push(node.name);
+          temp.sort();
+          func.returnsNames = temp;
           func.save();
         }
       });
@@ -201,6 +208,10 @@ function fixFunctions() {
           console.log(err);
         } else {
           func.args.push(node._id);
+          let temp = func.argsNames;
+          temp.push(node.name);
+          temp.sort();
+          func.argsNames = temp;
           func.save();
         }
       });
@@ -217,6 +228,10 @@ function fixFunctions() {
           console.log(err);
         } else {
           func.args.push(node._id);
+          let temp = func.argsNames;
+          temp.push(node.name);
+          temp.sort();
+          func.argsNames = temp;
           func.save();
         }
       });
@@ -230,7 +245,11 @@ function fixFunctions() {
         if (err) {
           console.log(err);
         } else {
-          func.results.push(node._id);
+          func.returns.push(node._id);
+          let temp = func.returnsNames;
+          temp.push(node.name);
+          temp.sort();
+          func.returnsNames = temp;
           func.save();
         }
       });

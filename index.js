@@ -19,9 +19,11 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 app.use(methodOverride('_method'));
-app.use(express.static(__dirname + '/library'));
+app.use('/js', express.static(__dirname + '/library'));
 app.use('/docs', express.static(__dirname + '/app/docs'));
 app.use(morgan('dev'));
+
+// var seedDB = require('./app/seedDB'); seedDB();
 
 var getByName = require('./app/routes/getByNameRoutes');
 app.use('/', getByName);
