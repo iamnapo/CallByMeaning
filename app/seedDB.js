@@ -39,6 +39,18 @@ function addNodes() {
     desc: 'A person\'s astrogical sign.',
     units: ['word']
   });
+
+  Node.create({
+    name: 'hours',
+    desc: 'Unit of measurement of time.',
+    units: ['hours']
+  });
+
+  Node.create({
+    name: 'seconds',
+    desc: 'Unit of measurement of time.',
+    units: ['seconds']
+  });
   console.log('Nodes added.');
 }
 
@@ -79,6 +91,11 @@ function addRelations() {
     desc: 'First node is a different representation of second node'
   });
   console.log('Relations added.');
+
+  Relation.create({
+    name: 'unitConversion',
+    desc: 'The two nodes are differents unit of measurement of the same thing.'
+  });
 }
 
 function fixNodes() {
@@ -281,7 +298,7 @@ function fixRelations() {
                 id: nodeB._id,
                 name: nodeB.name
               };
-              relation.connects.push({start: start, end: end});
+              relation.connects.push({start: start, end: end, mathRelation: ''});
               relation.save();
             }
           });
@@ -311,7 +328,66 @@ function fixRelations() {
                 id: nodeB._id,
                 name: nodeB.name
               };
-              relation.connects.push({start: start, end: end});
+              relation.connects.push({start: start, end: end, mathRelation: ''});
+              relation.save();
+            }
+          });
+        }
+      });
+    }
+  });
+
+  // 'unitConversion'
+  Node.findOne({name: 'hours'}, function (err, nodeA) {
+    if (err) {
+      console.log(err);
+    } else {
+      Node.findOne({name: 'seconds'}, function (err, nodeB) {
+        if (err) {
+          console.log(err);
+        } else {
+          Relation.findOne({name: 'unitConversion'}, function (err, relation) {
+            if (err) {
+              console.log(err);
+            } else {
+              var start = {
+                id: nodeA._id,
+                name: nodeA.name
+              };
+              var end = {
+                id: nodeB._id,
+                name: nodeB.name
+              };
+              relation.connects.push({start: start, end: end, mathRelation: 'start / 60'});
+              relation.save();
+            }
+          });
+        }
+      });
+    }
+  });
+
+  Node.findOne({name: 'seconds'}, function (err, nodeA) {
+    if (err) {
+      console.log(err);
+    } else {
+      Node.findOne({name: 'hours'}, function (err, nodeB) {
+        if (err) {
+          console.log(err);
+        } else {
+          Relation.findOne({name: 'unitConversion'}, function (err, relation) {
+            if (err) {
+              console.log(err);
+            } else {
+              var start = {
+                id: nodeA._id,
+                name: nodeA.name
+              };
+              var end = {
+                id: nodeB._id,
+                name: nodeB.name
+              };
+              relation.connects.push({start: start, end: end, mathRelation: 'start * 60'});
               relation.save();
             }
           });

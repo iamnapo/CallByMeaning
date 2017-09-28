@@ -22,9 +22,9 @@ var relationSchema = new mongoose.Schema({
         ref: 'Node'
       },
       name: String
-    }
-  }],
-  math_relation: String
+    },
+    mathRelation: String
+  }]
 });
 
 module.exports = mongoose.model('Relation', relationSchema);

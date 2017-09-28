@@ -1,5 +1,5 @@
 'use strict';
 
-module.export = function () {
+module.exports = function () {
   return (new Date().getTime() / 1000);
 };

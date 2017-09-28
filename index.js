@@ -23,13 +23,20 @@ app.use('/js', express.static(__dirname + '/library'));
 app.use('/docs', express.static(__dirname + '/app/docs'));
 app.use(morgan('dev'));
 
-// var seedDB = require('./app/seedDB'); seedDB();
+//var seedDB = require('./app/seedDB'); seedDB();
+
+app.get('/', function (req, res) {
+  res.send('<h1>Hello There :)</h1><br>Check <a href=./gbn>gbn</a><br>Check <a href=./gbm>gbm</a><br>Check <a href=./cbm>cbm</a>')
+});
 
 var getByName = require('./app/routes/getByNameRoutes');
-app.use('/', getByName);
+app.use('/gbn', getByName);
 
 var getByMeaning = require('./app/routes/getByMeaningRoutes');
 app.use('/gbm', getByMeaning);
+
+var callByMeaning = require('./app/routes/callByMeaningRoutes');
+app.use('/cbm', callByMeaning);
 
 var server = app.listen(port, function () {
   console.log('Server has started at http://localhost:%s. ' + chalk.magenta('Have fun :)'), server.address().port);

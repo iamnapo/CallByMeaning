@@ -1,5 +1,6 @@
 'use strict';
 
 module.exports = function (date) {
-  return (date.getTime() / 1000);
+  let temp = new Date(date);
+  return (temp.getTime() / 1000);
 };

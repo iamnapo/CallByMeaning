@@ -6,7 +6,7 @@ var router = express.Router();
 var Function = require('../../models/function');
 
 router.get('/', function (req, res) {
-  res.send('Hello Napo. This is the path to search by meaning. Detailed information can be found <a href=./docs/GETBYMEANING.md>here</a>. Check <a href=./gbm/search>this</a>');
+  res.send('Hello Napo. This is the path to search by meaning. Detailed information can be found <a href=../docs/GETBYMEANING.md>here</a>. Check <a href=../gbm/search>this</a>');
 });
 
 router.get('/search', function (req, res) {
@@ -30,6 +30,9 @@ router.post('/search', function (req, res) {
     if (err) {
       console.log(err);
     } else {
+      if (funcs == null) {
+        return res.status(418).send('Could not find a function with these types of arguments/returns.');
+      }
       for (let func of funcs) {
         let foundMatch = true;
         if (func.returnsNames.length === outputNodes.length) {
@@ -52,7 +55,7 @@ router.post('/search', function (req, res) {
           return res.json(temp);
         } 
       }
-      res.send('Function not found.');
+      return res.status(418).send('Function not found.');
     }
   });
 });
