@@ -1,7 +1,8 @@
 'use strict';
 
 module.exports = function(date) {
-  var zodiac = {
+  let temp = new Date(date);
+  let zodiac = {
     'Capricorn1':{'m':0,'d':20},
     'Aquarius':{'m':1,'d':19},
     'Pisces':{'m':2,'d':20},
@@ -17,8 +18,8 @@ module.exports = function(date) {
     'Capricorn2':{'m':11,'d':31}
   };
   for(let z in zodiac) {
-    let endDate = new Date(date.getFullYear(), zodiac[z].m, zodiac[z].d);
-    if (date <= endDate) {
+    let endDate = new Date(temp.getFullYear(), zodiac[z].m, zodiac[z].d);
+    if (temp <= endDate) {
       return z.replace(/[0-9]/g, '');
     }
   }

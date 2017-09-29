@@ -16,13 +16,14 @@ router.get('/call', function (req, res) {
 });
 
 router.post('/call', function (req, res) {
+  var returnCode = req.body.returnCode || false;
   // Get what the inputs are, their values and in what units
-  var inputNodes = req.body.inputNodes;
-  var inputUnits = req.body.inputUnits;
-  var inputVars = req.body.inputVars;
+  var inputNodes = req.body.inputNodes instanceof Object ? req.body.inputNodes : req.body.inputNodes.split(' ').join('').split(',');
+  var inputUnits = req.body.inputUnits instanceof Object ? req.body.inputUnits : req.body.inputUnits.split(' ').join('').split(',');
+  var inputVars = req.body.inputVars instanceof Object ? req.body.inputVars : req.body.inputVars.split(' ').join('').split(',');
   // Get what results the caller wants and in what units
-  var outputNodes = req.body.outputNodes;
-  var outputUnits = req.body.outputUnits;
+  var outputNodes = req.body.outputNodes instanceof Object ? req.body.outputNodes : req.body.outputNodes.split(' ').join('').split(',');
+  var outputUnits = req.body.outputUnits instanceof Object ? req.body.outputUnits : req.body.outputUnits.split(' ').join('').split(',');
   if (outputNodes == null || outputNodes.length !== outputUnits.length) {
     return res.status(400).send('A function must have at least one output and every output must have its unit.');
   }
@@ -49,6 +50,9 @@ router.post('/call', function (req, res) {
           foundMatchForNodes = false;
         }
         if (foundMatchForNodes) {
+          if (returnCode) {
+            return res.json(func.codeFile);
+          }
           // if I'm here, func is a function with correct inputs AND correct outputs, but not in the same units
           var correctInputs = [];
           if (inputUnits == null) {
@@ -99,7 +103,7 @@ router.post('/call', function (req, res) {
               }
             }
           });
-        } 
+        }
       }
     }
   });

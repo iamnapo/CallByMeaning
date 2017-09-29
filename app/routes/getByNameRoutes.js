@@ -8,7 +8,7 @@ var Function = require('../../models/function');
 var Relation = require('../../models/relation');
 
 router.get('/', function (req, res) {
-  res.send('Hello Napo. This is the path to search by name. Detailed information can be found <a href=../docs/GETBYNAME.md>here</a>.<br> Check <a href=./gbn/c>this</a><br>Check <a href=./gbn/f>this</a><br>Check <a href=./gbn/r>this</a>');
+  res.send('Hello Napo. This is the path to search by name. Detailed information can be found <a href=../docs/GETBYNAME.md>here</a>.<br> Check <a href=./gbn/c>/c/</a><br>Check <a href=./gbn/f>/f/</a><br>Check <a href=./gbn/r>/r/</a>');
 });
 
 router.get('/c', function (req,res) {
@@ -21,9 +21,9 @@ router.get('/c/:node', function(req, res) {
       console.log(err);
     } else {
       if (!node) {
-        res.status(418).send('Node not found in DB.');
+        return res.status(418).send('Node not found in DB.');
       } else {
-        res.json(node);        
+        return res.json(node);        
       }
     }
   });
