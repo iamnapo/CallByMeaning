@@ -16,7 +16,12 @@ router.get('/call', function (req, res) {
 });
 
 router.post('/call', function (req, res) {
-  var returnCode = req.body.returnCode || false;
+  req.body.inputNodes = req.body.inputNodes || [];
+  req.body.inputUnits = req.body.inputUnits || [];
+  req.body.inputVars = req.body.inputVars || [];
+  req.body.outputNodes = req.body.outputNodes || [];
+  req.body.outputUnits = req.body.outputUnits || [];
+  var returnCode = eval(req.headers.returncode) || false;
   // Get what the inputs are, their values and in what units
   var inputNodes = req.body.inputNodes instanceof Object ? req.body.inputNodes : req.body.inputNodes.split(' ').join('').split(',');
   var inputUnits = req.body.inputUnits instanceof Object ? req.body.inputUnits : req.body.inputUnits.split(' ').join('').split(',');
@@ -51,7 +56,11 @@ router.post('/call', function (req, res) {
         }
         if (foundMatchForNodes) {
           if (returnCode) {
-            return res.json(func.codeFile);
+            var codeRes = {
+              desc: func.desc,
+              code: func.codeFile
+            };
+            return res.json(codeRes);
           }
           // if I'm here, func is a function with correct inputs AND correct outputs, but not in the same units
           var correctInputs = [];

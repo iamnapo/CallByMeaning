@@ -14,12 +14,16 @@ router.get('/search', function (req, res) {
 });
 
 router.post('/search', function (req, res) {
+  req.body.inputNodes = req.body.inputNodes || [];
+  req.body.inputUnits = req.body.inputUnits || [];
+  req.body.outputNodes = req.body.outputNodes || [];
+  req.body.outputUnits = req.body.outputUnits || [];
   // Get what the inputs are and in what units
-  var inputNodes = req.body.inputNodes;
-  var inputUnits = req.body.inputUnits;
+  var inputNodes = req.body.inputNodes instanceof Object ? req.body.inputNodes : req.body.inputNodes.split(' ').join('').split(',');
+  var inputUnits = req.body.inputUnits instanceof Object ? req.body.inputUnits : req.body.inputUnits.split(' ').join('').split(',');
   // Get what results the caller wants and in what units
-  var outputNodes = req.body.outputNodes;
-  var outputUnits = req.body.outputUnits;
+  var outputNodes = req.body.outputNodes instanceof Object ? req.body.outputNodes : req.body.outputNodes.split(' ').join('').split(',');
+  var outputUnits = req.body.outputUnits instanceof Object ? req.body.outputUnits : req.body.outputUnits.split(' ').join('').split(',');
   if (outputNodes == null || outputNodes.length !== outputUnits.length) {
     return res.status(400).send('A function must have at least one output and every output must have its unit.');
   }
