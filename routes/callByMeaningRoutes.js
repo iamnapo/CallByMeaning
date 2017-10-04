@@ -32,14 +32,14 @@ router.post('/call', function (req, res) {
   if (outputNodes == null || outputNodes.length !== outputUnits.length) {
     return res.status(400).send('A function must have at least one output and every output must have its unit.');
   }
-  if (inputNodes && inputUnits && inputVars && inputNodes.length !== inputUnits.length && inputNodes.length !== inputVars.length) {
+  if (inputNodes.length !== inputUnits.length || inputNodes.length !== inputVars.length) {
     return res.status(400).send('Input parameters must have the same length.');
   }
-  Function.find({argsNames: inputNodes || []}).populate('results').exec(function (err, funcs) {
+  Function.find({argsNames: inputNodes}).populate('results').exec(function (err, funcs) {
     if (err) {
       console.log(err);
     } else {
-      if (funcs == null) {
+      if (funcs.length === 0) {
         return res.status(418).send('Could not find a function with these types of arguments/returns.');
       }
       // if I'm here, funcs contains all the functions with the required input Nodes (but not the in the same units necessarily)
@@ -64,10 +64,11 @@ router.post('/call', function (req, res) {
           }
           // if I'm here, func is a function with correct inputs AND correct outputs, but not in the same units
           var correctInputs = [];
-          if (inputUnits == null) {
+          if (inputUnits.length === 0) {
             // only way to check for null and undefined
           } else {
             for (let i = 0; i < inputUnits.length; i++) {
+              let foundRelationIn = false;
               if (func.argsUnits[i] === inputUnits[i]) {
                 correctInputs[i] = inputVars[i];
                 continue;
@@ -80,6 +81,7 @@ router.post('/call', function (req, res) {
                     for (let connection of relation.connects) {
                       // if I find the correct connection 
                       if (connection.start.name === inputUnits[i] && connection.end.name === func.argsUnits[i]) {
+                        foundRelationIn = true;
                         // compute correct input value
                         let mathRelation = connection.mathRelation;
                         mathRelation = mathRelation.replace('start', JSON.stringify(inputVars[i]));
@@ -90,20 +92,25 @@ router.post('/call', function (req, res) {
                     }
                   }
                 });
+                if (!foundRelationIn) {
+                  return res.status(418).send('Could not find a relation between theses types of input units and the ones in the DB.');
+                }
               }
             }
           }
           // calculate result
-          var funcToRun = require('../../library/' + func.codeFile.substring(5));
+          var funcToRun = require('../library/' + func.codeFile.substring(5));
           var funcResult = funcToRun.apply(null, correctInputs);
           if (func.returnsUnits[0] === outputUnits[0]) {
             return res.send(JSON.stringify(funcResult));
           }
           // find "unitConversion" relation
+          let foundRelationOut = false;
           Relation.findOne({name: 'unitConversion'}, function (err, relation) {
             for (let connection of relation.connects) {
               // if I find the correct connection 
               if (connection.start.name === outputUnits[0] && connection.end.name === func.returnsUnits[0]) {
+                foundRelationOut = true;
                 // compute correct output value
                 let mathRelation = connection.mathRelation;
                 mathRelation = mathRelation.replace('start', JSON.stringify(funcResult));
@@ -111,7 +118,12 @@ router.post('/call', function (req, res) {
                 return res.send(mathRelation);
               }
             }
+            if (!foundRelationOut) {
+              return res.status(418).send('Could not find a relation between theses types of output units and the ones in the DB.');
+            }
           });
+        } else {
+          return res.status(418).send('Could not find a function with these outputs.');
         }
       }
     }

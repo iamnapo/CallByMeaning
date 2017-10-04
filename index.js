@@ -7,6 +7,8 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var morgan = require('morgan');
 var chalk = require('chalk');
+var fs = require('fs');
+var path = require('path');
 var port = process.env.PORT || 3000;
 
 mongoose.connect('mongodb://admin:admin@ds149724.mlab.com:49724/callbymeaning', {
@@ -19,7 +21,8 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.use('/js', express.static(__dirname + '/library'));
 app.use('/docs', express.static(__dirname + '/app/docs'));
-app.use(morgan('dev'));
+var accessLogStream = fs.createWriteStream(path.join(__dirname, 'logs/access.log'), {flags: 'a'});
+app.use(morgan('dev', {stream: accessLogStream}));
 
 //var seedDB = require('./app/seedDB'); seedDB();
 
@@ -36,6 +39,10 @@ app.use('/gbm', getByMeaning);
 var callByMeaning = require('./routes/callByMeaningRoutes');
 app.use('/cbm', callByMeaning);
 
-app.listen(port, function () {
+var server = app.listen(port, function () {
   console.log('Server has started at http://localhost:%s. ' + chalk.magenta('Have fun :)'), port);
 });
+
+exports.close = function(){
+  server.close();
+};
