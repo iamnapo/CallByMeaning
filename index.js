@@ -7,8 +7,6 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var morgan = require('morgan');
 var chalk = require('chalk');
-
-var host = process.env.HOST || 'localhost';
 var port = process.env.PORT || 3000;
 
 mongoose.connect('mongodb://admin:admin@ds149724.mlab.com:49724/callbymeaning', {
@@ -29,15 +27,15 @@ app.get('/', function (req, res) {
   res.send('<h1>Hello There :)</h1><br>Check <a href=./gbn>Get by name</a><br>Check <a href=./gbm>Get by meaning</a><br>Check <a href=./cbm>Call by meaning</a>');
 });
 
-var getByName = require('./app/routes/getByNameRoutes');
+var getByName = require('./routes/getByNameRoutes');
 app.use('/gbn', getByName);
 
-var getByMeaning = require('./app/routes/getByMeaningRoutes');
+var getByMeaning = require('./routes/getByMeaningRoutes');
 app.use('/gbm', getByMeaning);
 
-var callByMeaning = require('./app/routes/callByMeaningRoutes');
+var callByMeaning = require('./routes/callByMeaningRoutes');
 app.use('/cbm', callByMeaning);
 
-app.listen(port, host, function () {
-  console.log('Server has started at http://%s:%s. ' + chalk.magenta('Have fun :)'), host, port);
+app.listen(port, function () {
+  console.log('Server has started at http://localhost:%s. ' + chalk.magenta('Have fun :)'), port);
 });

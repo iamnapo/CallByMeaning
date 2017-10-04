@@ -4,11 +4,11 @@ var express = require('express');
 var router = express.Router();
 var math = require('mathjs');
 
-var Function = require('../../models/function');
-var Relation = require('../../models/relation');
+var Function = require('../models/function');
+var Relation = require('../models/relation');
 
 router.get('/', function (req, res) {
-  res.send('Hello Napo. This is the path to call a function by meaning. Detailed information can be found <a href=../docs/CALLBYMEANING.md>here</a>. Check <a href=../cbm/call>this</a>');
+  res.send('Hello. This is the path to call a function by meaning. Detailed information can be found <a href=../docs/CALLBYMEANING.md>here</a>. Check <a href=../cbm/call>this</a>');
 });
 
 router.get('/call', function (req, res) {
@@ -57,8 +57,8 @@ router.post('/call', function (req, res) {
         if (foundMatchForNodes) {
           if (returnCode) {
             var codeRes = {
-              desc: func.desc,
-              code: func.codeFile
+              function: func.codeFile,
+              desc: func.desc
             };
             return res.json(codeRes);
           }

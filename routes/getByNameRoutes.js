@@ -3,12 +3,12 @@
 var express = require('express');
 var router = express.Router();
 
-var Node = require('../../models/node');
-var Function = require('../../models/function');
-var Relation = require('../../models/relation');
+var Node = require('../models/node');
+var Function = require('../models/function');
+var Relation = require('../models/relation');
 
 router.get('/', function (req, res) {
-  res.send('Hello Napo. This is the path to search by name. Detailed information can be found <a href=../docs/GETBYNAME.md>here</a>.<br> Check <a href=./gbn/c>/c/</a><br>Check <a href=./gbn/f>/f/</a><br>Check <a href=./gbn/r>/r/</a>');
+  res.send('Hello. This is the path to search by name. Detailed information can be found <a href=../docs/GETBYNAME.md>here</a>.<br> Check <a href=./gbn/c>/c/</a><br>Check <a href=./gbn/f>/f/</a><br>Check <a href=./gbn/r>/r/</a>');
 });
 
 router.get('/c', function (req,res) {
