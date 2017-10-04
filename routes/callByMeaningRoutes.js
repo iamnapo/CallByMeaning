@@ -79,7 +79,7 @@ router.post('/call', function (req, res) {
                     console.log(err);
                   } else {
                     for (let connection of relation.connects) {
-                      // if I find the correct connection 
+                      // if I find the correct connection
                       if (connection.start.name === inputUnits[i] && connection.end.name === func.argsUnits[i]) {
                         foundRelationIn = true;
                         // compute correct input value
@@ -108,7 +108,7 @@ router.post('/call', function (req, res) {
           let foundRelationOut = false;
           Relation.findOne({name: 'unitConversion'}, function (err, relation) {
             for (let connection of relation.connects) {
-              // if I find the correct connection 
+              // if I find the correct connection
               if (connection.start.name === outputUnits[0] && connection.end.name === func.returnsUnits[0]) {
                 foundRelationOut = true;
                 // compute correct output value

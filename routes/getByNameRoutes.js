@@ -23,7 +23,7 @@ router.get('/c/:node', function(req, res) {
       if (!node) {
         return res.status(418).send('Node not found in DB.');
       } else {
-        return res.json(node);        
+        return res.json(node);
       }
     }
   });

@@ -69,7 +69,7 @@ describe('CallByMeaning Server', function tests() {
     });
 
     describe('/f', function test() {
-      
+
       it('GET / returns status code 200', function test(done) {
         this.timeout(2000);
         request.get(base_url + 'gbn/f', function (error, response) {
@@ -77,7 +77,7 @@ describe('CallByMeaning Server', function tests() {
           done();
         });
       });
-      
+
       it('GET something that exists', function test(done) {
         this.timeout(2000);
         request.get(base_url + 'gbn/f/getTime', function (error, response, body) {
@@ -85,7 +85,7 @@ describe('CallByMeaning Server', function tests() {
           done();
         });
       });
-      
+
       it('GET something that doesn\'t exist has status code 418', function test(done) {
         this.timeout(2000);
         request.get(base_url + 'gbn/f/blalasda', function (error, response) {
@@ -93,11 +93,11 @@ describe('CallByMeaning Server', function tests() {
           done();
         });
       });
-      
+
     });
 
     describe('/r', function test() {
-      
+
       it('GET / returns status code 200', function test(done) {
         this.timeout(2000);
         request.get(base_url + 'gbn/r', function (error, response) {
@@ -105,7 +105,7 @@ describe('CallByMeaning Server', function tests() {
           done();
         });
       });
-      
+
       it('GET something that exists', function test(done) {
         this.timeout(2000);
         request.get(base_url + 'gbn/r/unitConversion', function (error, response, body) {
@@ -113,7 +113,7 @@ describe('CallByMeaning Server', function tests() {
           done();
         });
       });
-      
+
       it('GET something that doesn\'t exist has status code 418', function test(done) {
         this.timeout(2000);
         request.get(base_url + 'gbn/r/blalasda', function (error, response) {
@@ -121,9 +121,9 @@ describe('CallByMeaning Server', function tests() {
           done();
         });
       });
-      
+
     });
-    
+
   });
 
   describe('/gbm', function test() {
@@ -153,7 +153,7 @@ describe('CallByMeaning Server', function tests() {
           done();
         });
       });
-  
+
       it('GET /<everythingelse> returns status code 404', function test(done) {
         this.timeout(2000);
         request.get(base_url + 'gbm/search/alsdlasd', function (error, response) {
@@ -183,7 +183,7 @@ describe('CallByMeaning Server', function tests() {
   });
 
   describe('/cbm', function test() {
-    
+
     it('GET / returns status code 200', function test(done) {
       this.timeout(2000);
       request.get(base_url + 'cbm/', function (error, response) {
@@ -191,7 +191,7 @@ describe('CallByMeaning Server', function tests() {
         done();
       });
     });
-    
+
     it('GET /<everythingelse> returns status code 404', function test(done) {
       this.timeout(2000);
       request.get(base_url + 'cbm/alsdlasd', function (error, response) {
@@ -199,9 +199,9 @@ describe('CallByMeaning Server', function tests() {
         done();
       });
     });
-    
+
     describe('/call', function test() {
-    
+
       it('GET / returns status code 200', function test(done) {
         this.timeout(2000);
         request.get(base_url + 'cbm/call', function (error, response) {
@@ -209,7 +209,7 @@ describe('CallByMeaning Server', function tests() {
           done();
         });
       });
-      
+
       it('GET /<everythingelse> returns status code 404', function test(done) {
         this.timeout(2000);
         request.get(base_url + 'cbm/call/alsdlasd', function (error, response) {
@@ -217,7 +217,7 @@ describe('CallByMeaning Server', function tests() {
           done();
         });
       });
-    
+
       it('POST / can retrieve a function with given arguments if it is in DB (with same units)', function test(done) {
         this.timeout(2000);
         request.post({uri: base_url + 'cbm/call', form: {'outputNodes': ['time'], 'outputUnits': ['seconds']}}, function (error, response, body) {
@@ -225,7 +225,7 @@ describe('CallByMeaning Server', function tests() {
           done();
         });
       });
-    
+
       it('POST / can retrieve a function with given arguments if it is in DB (with different units)', function test(done) {
         this.timeout(2000);
         request.post({uri: base_url + 'cbm/call', form: {'outputNodes': ['time'], 'outputUnits': ['hours']}}, function (error, response, body) {
@@ -250,9 +250,9 @@ describe('CallByMeaning Server', function tests() {
           done();
         });
       });
-    
+
     });
-    
+
   });
 
 });

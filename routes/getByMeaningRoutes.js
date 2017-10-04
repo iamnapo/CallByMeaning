@@ -57,7 +57,7 @@ router.post('/search', function (req, res) {
             desc: func.desc
           };
           return res.json(temp);
-        } 
+        }
       }
       return res.status(418).send('Function not found.');
     }

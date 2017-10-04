@@ -1,0 +1,19 @@
+after_script:
+- rm -rf logs
+before_install:
+- npm update -g npm
+before_script:
+- mkdir logs && touch logs/access.log
+cache:
+  directories:
+  - node_modules
+deploy:
+  api_key:
+    secure: pAOopOfO7/xAZq1ahAy1eN95L+ZFo8RLUiAGuuuUbmxSJgxmWcUIHpo7jrRxk+DBhnye5RcqICRvlfb+6qsI/8+ZhcMeGzs+NqwOfGjVaKDNjiFgEOIv+c081uf2Jrc/ttXQ3pvLPOA6wYbxpkm8sNCa/KvJ92jJc0TJcQdTgfCdIuqwGBK6zIEWiWLfvS35M20HDkhBuywu3kY1as71B0T3JQeQOU3DxQgg0M2TsHpVeHIjrREJx8+mjdn6h/FO39ofh/VDdQ0ik87zOsv8/xECh2OfDId0N8+UK4Qr6Ao2OBetZzO7F/gjTp3ycF4z82I1TxKdH0fu9w94Gb66IC56FTw6dIQlihK5vMlUMAWmgY2E/pUYrTTYpTRhSHuQZiT2WMunaDcR0Rg9xSq+TeyOlZ28qVzv4Us3jtrLvuIokkOiQaCmOhx/aw69YFlRo/a+sjeOC25V5Wy8rqkM/bVJ3hAp4kLrhUNbYRGdeDVMQTRn95kHU8DEVIHAmtlVnXSbaWTIG9zSfY4EDL3rdHFXSkDaPzNoG7aDvnQJ/P2XaDnW9UnMFbRj/t1Ei8gZ/k0VylPcMRwZ9jOvYNwmaImLH9Q6oodRzsqbJcSPcdRwcsfs7Gc2FQWmV8R0FH6GB30akdQ5drtaIw+lOKL0bt57ADzRzhofAPkpMuKyzHA=
+  provider: heroku
+  skip_cleanup: true
+language: node_js
+node_js:
+- node
+notifications:
+  email: false
