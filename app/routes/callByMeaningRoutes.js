@@ -43,7 +43,9 @@ router.post('/call', function (req, res) {
         return res.status(418).send('Could not find a function with these types of arguments/returns.');
       }
       // if I'm here, funcs contains all the functions with the required input Nodes (but not the in the same units necessarily)
+      let funcsChecked = 0;
       for (let func of funcs) {
+        funcsChecked += 1;
         let foundMatchForNodes = true;
         if (func.returnsNames.length === outputNodes.length) {
           for (let i = 0; i < outputNodes.length; i++) {
@@ -93,7 +95,7 @@ router.post('/call', function (req, res) {
                   }
                 });
                 if (!foundRelationIn) {
-                  return res.status(418).send('Could not find a relation between theses types of input units and the ones in the DB.');
+                  return res.status(418).send('Function not found in DB.');
                 }
               }
             }
@@ -105,12 +107,10 @@ router.post('/call', function (req, res) {
             return res.send(JSON.stringify(funcResult));
           }
           // find "unitConversion" relation
-          let foundRelationOut = false;
           Relation.findOne({name: 'unitConversion'}, function (err, relation) {
             for (let connection of relation.connects) {
               // if I find the correct connection
               if (connection.start.name === outputUnits[0] && connection.end.name === func.returnsUnits[0]) {
-                foundRelationOut = true;
                 // compute correct output value
                 let mathRelation = connection.mathRelation;
                 mathRelation = mathRelation.replace('start', JSON.stringify(funcResult));
@@ -118,14 +118,14 @@ router.post('/call', function (req, res) {
                 return res.send(mathRelation);
               }
             }
-            if (!foundRelationOut) {
-              return res.status(418).send('Could not find a relation between theses types of output units and the ones in the DB.');
-            }
           });
-        } else {
-          return res.status(418).send('Could not find a function with these outputs.');
-        }
+        } 
       }
+      setTimeout(function () {
+        if (funcsChecked === funcs.length && !res.headersSent) {
+          return res.status(418).send('Function not found in DB.');
+        }
+      }, 1000);
     }
   });
 });

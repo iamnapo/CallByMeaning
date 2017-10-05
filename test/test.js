@@ -234,7 +234,7 @@ describe('CallByMeaning Server', function tests() {
         });
       });
 
-      it('POST / can retrieve a function\'s code is returncode = true', function test(done) {
+      it('POST / can retrieve a function\'s code if returncode = true', function test(done) {
         this.timeout(2000);
         request.post({uri: base_url + 'cbm/call', headers: {returncode: true}, form: {'outputNodes': ['time'], 'outputUnits': ['hours']}}, function (error, response, body) {
           assert.ok(JSON.parse(body).function === './js/getTime.js');
