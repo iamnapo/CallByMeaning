@@ -1,6 +1,6 @@
-var Node = require('../models/Node');
-var Function = require('../models/Function');
-var Relation = require('../models/Relation');
+var Node = require('./models/Node');
+var Function = require('./models/Function');
+var Relation = require('./models/Relation');
 
 function clearDB() {
   Node.remove({}, function (err) {

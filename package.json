@@ -2,9 +2,9 @@
   "name": "callbymeaning",
   "version": "1.0.0",
   "description": "Diploma Thesis",
-  "main": "index.js",
+  "main": "app/index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node app/index.js",
     "test": "mocha"
   },
   "repository": {

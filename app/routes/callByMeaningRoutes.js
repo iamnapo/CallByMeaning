@@ -99,7 +99,7 @@ router.post('/call', function (req, res) {
             }
           }
           // calculate result
-          var funcToRun = require('../library/' + func.codeFile.substring(5));
+          var funcToRun = require('../../library/' + func.codeFile.substring(5));
           var funcResult = funcToRun.apply(null, correctInputs);
           if (func.returnsUnits[0] === outputUnits[0]) {
             return res.send(JSON.stringify(funcResult));

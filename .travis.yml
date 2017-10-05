@@ -18,3 +18,4 @@ node_js:
 - node
 notifications:
   email: false
+sudo: false

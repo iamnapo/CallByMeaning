@@ -5,7 +5,7 @@
 var chai = require('chai');
 var assert = chai.assert;
 var request = require('request');
-var server = require('../index.js');
+var server = require('../app/index.js');
 var base_url = 'http://localhost:3000/';
 
 describe('CallByMeaning Server', function tests() {
