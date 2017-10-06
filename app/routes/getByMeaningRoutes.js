@@ -6,7 +6,7 @@ var router = express.Router();
 var Function = require('../models/function');
 
 router.get('/', function (req, res) {
-  res.send('Hello. This is the path to search by meaning. Detailed information can be found <a href=../docs/GETBYMEANING.md>here</a>. Check <a href=../gbm/search>/search</a>');
+  res.send('Hello. This is the path to search by meaning. Detailed information can be found <a href=https://github.com/iamnapo/CallByMeaning/>here</a>. Check <a href=../gbm/search>/search</a>');
 });
 
 router.get('/search', function (req, res) {

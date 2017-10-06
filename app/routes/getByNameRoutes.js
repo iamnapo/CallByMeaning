@@ -8,7 +8,7 @@ var Function = require('../models/function');
 var Relation = require('../models/relation');
 
 router.get('/', function (req, res) {
-  res.send('Hello. This is the path to search by name. Detailed information can be found <a href=../docs/GETBYNAME.md>here</a>.<br> Check <a href=./gbn/c>/c/</a><br>Check <a href=./gbn/f>/f/</a><br>Check <a href=./gbn/r>/r/</a>');
+  res.send('Hello. This is the path to search by name. Detailed information can be found <a href=https://github.com/iamnapo/CallByMeaning/>here</a>.<br> Check <a href=./gbn/c>/c/</a><br>Check <a href=./gbn/f>/f/</a><br>Check <a href=./gbn/r>/r/</a>');
 });
 
 router.get('/c', function (req,res) {
