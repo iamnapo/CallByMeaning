@@ -44,5 +44,6 @@ var server = app.listen(port, function () {
 });
 
 exports.close = function(){
+  mongoose.connection.close();
   server.close();
 };
