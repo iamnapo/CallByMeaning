@@ -24,8 +24,6 @@ app.use('/docs', express.static(__dirname + '/../docs'));
 var accessLogStream = fs.createWriteStream(path.join(__dirname, '../logs/access.log'), {flags: 'a'});
 app.use(morgan('dev', {stream: accessLogStream}));
 
-//var seedDB = require('./app/seedDB'); seedDB();
-
 app.get('/', function (req, res) {
   res.send('<h1>Hello There :)</h1><br>Check <a href=./gbn>Get by name</a><br>Check <a href=./gbm>Get by meaning</a><br>Check <a href=./cbm>Call by meaning</a>');
 });
@@ -38,6 +36,10 @@ app.use('/gbm', getByMeaning);
 
 var callByMeaning = require('./routes/callByMeaningRoutes');
 app.use('/cbm', callByMeaning);
+
+app.get('/:anything', function (req, res) {
+  res.send('Hmm... How did you end up here?');
+});
 
 var server = app.listen(port, function () {
   console.log('Server has started at http://localhost:%s. ' + chalk.magenta('Have fun :)'), port);
