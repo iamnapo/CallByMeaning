@@ -2,6 +2,7 @@
 
 var express = require('express');
 var router = express.Router();
+var request = require('request');
 
 var Function = require('../models/function');
 
@@ -10,58 +11,58 @@ router.get('/', function (req, res) {
 });
 
 router.get('/search', function (req, res) {
+  console.log();
   res.send('This is the path to use for searching. Send a POST request with the parameters in its body.');
 });
 
 router.post('/search', function (req, res) {
   req.body.inputNodes = req.body.inputNodes || [];
-  req.body.inputUnits = req.body.inputUnits || [];
-  req.body.outputNodes = req.body.outputNodes || [];
-  req.body.outputUnits = req.body.outputUnits || [];
-  // Get what the inputs are and in what units
+  if (req.body.outputNodes == null) return res.status(400).send('A function must have at least one output');
   var inputNodes = req.body.inputNodes instanceof Object ? req.body.inputNodes : req.body.inputNodes.split(' ').join('').split(',');
-  var inputUnits = req.body.inputUnits instanceof Object ? req.body.inputUnits : req.body.inputUnits.split(' ').join('').split(',');
-  // Get what results the caller wants and in what units
   var outputNodes = req.body.outputNodes instanceof Object ? req.body.outputNodes : req.body.outputNodes.split(' ').join('').split(',');
-  var outputUnits = req.body.outputUnits instanceof Object ? req.body.outputUnits : req.body.outputUnits.split(' ').join('').split(',');
-  if (outputNodes == null || outputNodes.length !== outputUnits.length) {
-    return res.status(400).send('A function must have at least one output and every output must have its unit.');
-  }
-  if (inputNodes && inputUnits && inputNodes.length !== inputUnits.length) {
-    return res.status(400).send('Input parameters must have the same length.');
-  }
-  Function.find({argsNames: inputNodes || [], argsUnits: inputUnits || []}).populate('results').exec(function (err, funcs) {
-    if (err) {
-      console.log(err);
-    } else {
-      if (funcs == null) {
-        return res.status(418).send('Could not find a function with these types of arguments/returns.');
-      }
-      for (let func of funcs) {
-        let foundMatch = true;
-        if (func.returnsNames.length === outputNodes.length) {
-          for (let i = 0; i < outputNodes.length; i++) {
-            if (func.returnsNames[i] !== outputNodes[i]) {
-              foundMatch = false;
-            }
-            if (func.returnsUnits[i] !== outputUnits[i]) {
-              foundMatch = false;
+  Function.find({argsNames: inputNodes, returnsNames: outputNodes}, function (err, func) {
+    if (err) console.log(err);
+    if (func.length !== 0) return res.json({function: func[0].codeFile, desc: func[0].desc});
+    for (let i = 0; i < outputNodes.length; i++) {
+      if (res.headersSent) break;
+      request.get(req.protocol + '://' + req.get('host') + req.originalUrl[0] + 'gbn/c/' + outputNodes[i], function(err, response, body) {
+        if (response.statusCode !== 200) return res.status(418).send('Could not interpret the node: ' + outputNodes[i]);
+        outputNodes[i] = JSON.parse(body).name;
+        if (i === outputNodes.length - 1) {
+          if (inputNodes.length === 0) {
+            Function.find({argsNames: inputNodes, returnsNames: outputNodes}, function (err, func) {
+              if (err) console.log(err);
+              if (func.length !== 0) return res.json({function: func[0].codeFile, desc: func[0].desc});
+              return res.status(418).send('Function not found.');
+            });
+          } else {
+            for (let j = 0; j < inputNodes.length; j++) {
+              if (res.headersSent) break;              
+              request.get(req.protocol + '://' + req.get('host') + req.originalUrl[0] + 'gbn/c/' + inputNodes[j], function(err, response, body) {
+                if (response.statusCode !== 200) return res.status(418).send('Could not interpret the node: ' + inputNodes[j]);
+                outputNodes[i] = JSON.parse(body).name;
+                if (j === inputNodes.length - 1) {
+                  Function.find({argsNames: inputNodes, returnsNames: outputNodes}, function (err, func) {
+                    if (err) console.log(err);
+                    if (func.length !== 0) return res.json({function: func[0].codeFile, desc: func[0].desc});
+                    return res.status(418).send('Function not found.');
+                  });
+                } 
+              }); 
             }
           }
-        } else {
-          foundMatch = false;
         }
-        if (foundMatch) {
-          var temp = {
-            function: func.codeFile,
-            desc: func.desc
-          };
-          return res.json(temp);
-        }
-      }
-      return res.status(418).send('Function not found.');
+      });
     }
   });
+});
+
+router.all('/:anything', function (req, res) {
+  res.status(404).send('Hmm... How did you end up here?');
+});
+
+router.all('/search/:anything', function (req, res) {
+  res.status(404).send('Hmm... How did you end up here?');
 });
 
 module.exports = router;

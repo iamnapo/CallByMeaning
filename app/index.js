@@ -37,8 +37,8 @@ app.use('/gbm', getByMeaning);
 var callByMeaning = require('./routes/callByMeaningRoutes');
 app.use('/cbm', callByMeaning);
 
-app.get('/:anything', function (req, res) {
-  res.send('Hmm... How did you end up here?');
+app.all('/:anything', function (req, res) {
+  res.status(404).send('Hmm... How did you end up here?');
 });
 
 var server = app.listen(port, function () {
