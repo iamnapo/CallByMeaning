@@ -11,7 +11,7 @@ var fs = require('fs');
 var path = require('path');
 var port = process.env.PORT || 3000;
 
-mongoose.connect('mongodb://admin:admin@ds149724.mlab.com:49724/callbymeaning', {
+mongoose.connect(process.env.ON_HEROKU == 1 ? 'mongodb://admin:' + process.env.MLAB_PASS + '@ds149724.mlab.com:49724/callbymeaning' : 'mongodb://localhost/callbymeaning', {
   useMongoClient: true
 });
 mongoose.Promise = global.Promise;
