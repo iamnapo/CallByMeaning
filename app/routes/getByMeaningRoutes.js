@@ -20,9 +20,15 @@ router.post('/search', function (req, res) {
   if (req.body.outputNodes == null) return res.status(400).send('A function must have at least one output');
   var inputNodes = req.body.inputNodes instanceof Object ? req.body.inputNodes : req.body.inputNodes.split(' ').join('').split(',');
   var outputNodes = req.body.outputNodes instanceof Object ? req.body.outputNodes : req.body.outputNodes.split(' ').join('').split(',');
-  Function.find({argsNames: inputNodes, returnsNames: outputNodes}, function (err, func) {
+  Function.find({argsNames: inputNodes, returnsNames: outputNodes}, function (err, funcs) {
     if (err) console.log(err);
-    if (func.length !== 0) return res.json({function: func[0].codeFile, desc: func[0].desc});
+    if (funcs.length !== 0) {
+      let temp = [];
+      for (let t = 0; t < funcs.length; t ++) {
+        temp.push({function: funcs[0].codeFile, desc: funcs[0].desc});
+      }
+      return res.json(temp);
+    }
     for (let i = 0; i < outputNodes.length; i++) {
       if (res.headersSent) break;
       request.get(req.protocol + '://' + req.get('host') + req.originalUrl[0] + 'gbn/c/' + outputNodes[i], function(err, response, body) {
@@ -30,9 +36,15 @@ router.post('/search', function (req, res) {
         outputNodes[i] = JSON.parse(body).name;
         if (i === outputNodes.length - 1) {
           if (inputNodes.length === 0) {
-            Function.find({argsNames: inputNodes, returnsNames: outputNodes}, function (err, func) {
+            Function.find({argsNames: inputNodes, returnsNames: outputNodes}, function (err, funcs) {
               if (err) console.log(err);
-              if (func.length !== 0) return res.json({function: func[0].codeFile, desc: func[0].desc});
+              if (funcs.length !== 0) {
+                let temp = [];
+                for (let t = 0; t < funcs.length; t ++) {
+                  temp.push({function: funcs[0].codeFile, desc: funcs[0].desc});
+                }
+                return res.json(temp);
+              }
               return res.status(418).send('Function not found.');
             });
           } else {
@@ -42,9 +54,15 @@ router.post('/search', function (req, res) {
                 if (response.statusCode !== 200) return res.status(418).send('Could not interpret the node: ' + inputNodes[j]);
                 outputNodes[i] = JSON.parse(body).name;
                 if (j === inputNodes.length - 1) {
-                  Function.find({argsNames: inputNodes, returnsNames: outputNodes}, function (err, func) {
+                  Function.find({argsNames: inputNodes, returnsNames: outputNodes}, function (err, funcs) {
                     if (err) console.log(err);
-                    if (func.length !== 0) return res.json({function: func[0].codeFile, desc: func[0].desc});
+                    if (funcs.length !== 0) {
+                      let temp = [];
+                      for (let t = 0; t < funcs.length; t ++) {
+                        temp.push({function: funcs[0].codeFile, desc: funcs[0].desc});
+                      }
+                      return res.json(temp);
+                    }
                     return res.status(418).send('Function not found.');
                   });
                 } 

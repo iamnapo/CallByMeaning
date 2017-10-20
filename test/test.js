@@ -175,7 +175,7 @@ describe('CallByMeaning Server', function tests() {
       it('POST / returns a function if it exists', function test(done) {
         this.timeout(TIMEOUT_TIME);
         request.post({uri: base_url + 'gbm/search', form: {'outputNodes': ['time']}}, function (error, response, body) {
-          assert.ok(JSON.parse(body).function === './js/getTime.js');
+          assert.ok(JSON.parse(body)[0].function === './js/getTime.js');
           done();
         });
       });
