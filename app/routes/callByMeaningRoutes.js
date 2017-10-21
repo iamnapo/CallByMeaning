@@ -114,98 +114,13 @@ router.post('/call', function (req, res) {
   });
 });
 
-// Function.find({argsNames: inputNodes}).populate('results').exec(function (err, funcs) {
-//   if (err) {
-//     console.log(err);
-//   } else {
-//     if (funcs.length === 0) {
-//       return res.status(418).send('Could not find a function with these types of arguments/returns.');
-//     }
-//     // if I'm here, funcs contains all the functions with the required input Nodes (but not the in the same units necessarily)
-//     let funcsChecked = 0;
-//     for (let func of funcs) {
-//       funcsChecked += 1;
-//       let foundMatchForNodes = true;
-//       if (func.returnsNames.length === outputNodes.length) {
-//         for (let i = 0; i < outputNodes.length; i++) {
-//           if (func.returnsNames[i] !== outputNodes[i]) {
-//             foundMatchForNodes = false;
-//           }
-//         }
-//       } else {
-//         foundMatchForNodes = false;
-//       }
-//       if (foundMatchForNodes) {
-//         if (returnCode) {
-//           var codeRes = {
-//             function: func.codeFile,
-//             desc: func.desc
-//           };
-//           return res.json(codeRes);
-//         }
-//         // if I'm here, func is a function with correct inputs AND correct outputs, but not in the same units
-//         var correctInputs = [];
-//         if (inputUnits.length === 0) {
-//           // only way to check for null and undefined
-//         } else {
-//           for (let i = 0; i < inputUnits.length; i++) {
-//             let foundRelationIn = false;
-//             if (func.argsUnits[i] === inputUnits[i]) {
-//               correctInputs[i] = inputVars[i];
-//               continue;
-//             } else {
-//               // find "unitConversion" relation
-//               Relation.findOne({name: 'unitConversion'}, function (err, relation) {
-//                 if (err) {
-//                   console.log(err);
-//                 } else {
-//                   for (let connection of relation.connects) {
-//                     // if I find the correct connection
-//                     if (connection.start.name === inputUnits[i] && connection.end.name === func.argsUnits[i]) {
-//                       foundRelationIn = true;
-//                       // compute correct input value
-//                       let mathRelation = connection.mathRelation;
-//                       mathRelation = mathRelation.replace('start', JSON.stringify(inputVars[i]));
-//                       correctInputs[i] = math.eval(mathRelation);
-//                       // check next input
-//                       break;
-//                     }
-//                   }
-//                 }
-//               });
-//               if (!foundRelationIn) {
-//                 return res.status(418).send('Function not found in DB.');
-//               }
-//             }
-//           }
-//         }
-//         // calculate result
-//         var funcToRun = require('../../library/' + func.codeFile.substring(5));
-//         var funcResult = funcToRun.apply(null, correctInputs);
-//         if (func.returnsUnits[0] === outputUnits[0]) {
-//           return res.send(JSON.stringify(funcResult));
-//         }
-//         // find "unitConversion" relation
-//         Relation.findOne({name: 'unitConversion'}, function (err, relation) {
-//           for (let connection of relation.connects) {
-//             // if I find the correct connection
-//             if (connection.start.name === outputUnits[0] && connection.end.name === func.returnsUnits[0]) {
-//               // compute correct output value
-//               let mathRelation = connection.mathRelation;
-//               mathRelation = mathRelation.replace('start', JSON.stringify(funcResult));
-//               mathRelation = JSON.stringify(math.eval(mathRelation));
-//               return res.send(mathRelation);
-//             }
-//           }
-//         });
-//       } 
-//     }
-//     setTimeout(function () {
-//       if (funcsChecked === funcs.length && !res.headersSent) {
-//         return res.status(418).send('Function not found in DB.');
-//       }
-//     }, 1000);
-//   }
-// });
+router.all('/:anything', function (req, res) {
+  res.status(404).send('Hmm... How did you end up here?');
+});
+
+router.all('/call/:anything', function (req, res) {
+  res.status(404).send('Hmm... How did you end up here?');
+});
+
 
 module.exports = router;
