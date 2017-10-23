@@ -15,9 +15,7 @@ mongoose.connect(process.env.ON_HEROKU == 1 ? 'mongodb://admin:' + process.env.M
   useMongoClient: true
 });
 mongoose.Promise = global.Promise;
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use('/js', express.static(__dirname + '/../library'));
 app.use('/docs', express.static(__dirname + '/../docs'));
@@ -25,7 +23,7 @@ var accessLogStream = fs.createWriteStream(path.join(__dirname, '../logs/access.
 app.use(morgan('dev', {stream: accessLogStream}));
 
 app.get('/', function (req, res) {
-  res.send('<h1>Hello There :)</h1><br>Check <a href=./gbn>Get by name</a><br>Check <a href=./gbm>Get by meaning</a><br>Check <a href=./cbm>Call by meaning</a>');
+  return res.send('<h1>Hello There :)</h1><br>Check <a href=./gbn>Get by name</a><br>Check <a href=./gbm>Get by meaning</a><br>Check <a href=./cbm>Call by meaning</a>');
 });
 
 var getByName = require('./routes/getByNameRoutes');
@@ -42,7 +40,11 @@ app.all('/:anything', function (req, res) {
 });
 
 var server = app.listen(port, function () {
-  console.log('Server has started at http://localhost:%s. ' + chalk.magenta('Have fun :)'), port);
+  if (process.env.ON_HEROKU == 0) {
+    console.log('Server ' + chalk.green('started') + ' at http://localhost:%s. Have fun. 😀', port);
+  } else {
+    console.log('Server ' + chalk.green('started') + '. Have fun. 😀');
+  } 
 });
 
 exports.close = function(){

@@ -7,12 +7,11 @@ var request = require('request');
 var Function = require('../models/function');
 
 router.get('/', function (req, res) {
-  res.send('Hello. This is the path to search by meaning. Detailed information can be found <a href=https://github.com/iamnapo/CallByMeaning/>here</a>. Check <a href=../gbm/search>/search</a>');
+  return res.send('Hello. This is the path to search by meaning. Detailed information can be found <a href=https://github.com/iamnapo/CallByMeaning/>here</a>. Check <a href=../gbm/search>/search</a>');
 });
 
 router.get('/search', function (req, res) {
-  console.log();
-  res.send('This is the path to use for searching. Send a POST request with the parameters in its body.');
+  return res.send('This is the path to use for searching. Send a POST request with the parameters in its body.');
 });
 
 router.post('/search', function (req, res) {
@@ -76,11 +75,11 @@ router.post('/search', function (req, res) {
 });
 
 router.all('/:anything', function (req, res) {
-  res.status(404).send('Hmm... How did you end up here?');
+  return res.status(404).send('Hmm... How did you end up here?');
 });
 
 router.all('/search/:anything', function (req, res) {
-  res.status(404).send('Hmm... How did you end up here?');
+  return res.status(404).send('Hmm... How did you end up here?');
 });
 
 module.exports = router;

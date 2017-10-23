@@ -9,11 +9,11 @@ var Function = require('../models/function');
 var Relation = require('../models/relation');
 
 router.get('/', function (req, res) {
-  res.send('Hello. This is the path to call a function by meaning. Detailed information can be found <a href=https://github.com/iamnapo/CallByMeaning/>here</a>. Check <a href=../cbm/call>this</a>');
+  return res.send('Hello. This is the path to call a function by meaning. Detailed information can be found <a href=https://github.com/iamnapo/CallByMeaning/>here</a>. Check <a href=../cbm/call>this</a>');
 });
 
 router.get('/call', function (req, res) {
-  res.send('This is the path to use for calling. Send a POST request with the parameters in its body.');
+  return res.send('This is the path to use for calling. Send a POST request with the parameters in its body.');
 });
 
 router.post('/call', function (req, res) {
@@ -115,12 +115,11 @@ router.post('/call', function (req, res) {
 });
 
 router.all('/:anything', function (req, res) {
-  res.status(404).send('Hmm... How did you end up here?');
+  return res.status(404).send('Hmm... How did you end up here?');
 });
 
 router.all('/call/:anything', function (req, res) {
-  res.status(404).send('Hmm... How did you end up here?');
+  return res.status(404).send('Hmm... How did you end up here?');
 });
-
 
 module.exports = router;
