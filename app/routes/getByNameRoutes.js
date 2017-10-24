@@ -32,7 +32,7 @@ router.get('/c/:node', function(req, res) {
           if (err) console.log(err);
           if (node2) return res.json(node2);
           if (checked === result[0].synonyms.length && !res.headersSent) return res.status(418).send('Node not found in DB.');
-        }); 
+        });
       }
     });
   });

@@ -11,7 +11,7 @@ var fs = require('fs');
 var path = require('path');
 var port = process.env.PORT || 3000;
 
-mongoose.connect(process.env.ON_HEROKU == 1 ? 'mongodb://admin:' + process.env.MLAB_PASS + '@ds149724.mlab.com:49724/callbymeaning' : 'mongodb://localhost/callbymeaning', {
+mongoose.connect(process.env.ON_HEROKU == 1 ? 'mongodb://admin:' + process.env.MLAB_PASS + '@ds149724.mlab.com:49724/callbymeaning' : 'mongodb://localhost/callbymeaningTEST', {
   useMongoClient: true
 });
 mongoose.Promise = global.Promise;
@@ -42,9 +42,10 @@ app.all('/:anything', function (req, res) {
 var server = app.listen(port, function () {
   if (process.env.ON_HEROKU == 0) {
     console.log('Server ' + chalk.green('started') + ' at http://localhost:%s. Have fun. 😀', port);
+    //var fillWithFuncs = require('./dev/fillWithFuncs'); fillWithFuncs();
   } else {
     console.log('Server ' + chalk.green('started') + '. Have fun. 😀');
-  } 
+  }
 });
 
 exports.close = function(){

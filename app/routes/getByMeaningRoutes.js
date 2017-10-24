@@ -48,7 +48,7 @@ router.post('/search', function (req, res) {
             });
           } else {
             for (let j = 0; j < inputNodes.length; j++) {
-              if (res.headersSent) break;              
+              if (res.headersSent) break;
               request.get(req.protocol + '://' + req.get('host') + req.originalUrl[0] + 'gbn/c/' + inputNodes[j], function(err, response, body) {
                 if (response.statusCode !== 200) return res.status(418).send('Could not interpret the node: ' + inputNodes[j]);
                 outputNodes[i] = JSON.parse(body).name;
@@ -64,8 +64,8 @@ router.post('/search', function (req, res) {
                     }
                     return res.status(418).send('Function not found.');
                   });
-                } 
-              }); 
+                }
+              });
             }
           }
         }
