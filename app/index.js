@@ -11,7 +11,7 @@ var fs = require('fs');
 var path = require('path');
 var port = process.env.PORT || 3000;
 
-mongoose.connect(process.env.ON_HEROKU == 1 ? 'mongodb://admin:' + process.env.MLAB_PASS + '@ds149724.mlab.com:49724/callbymeaning' : 'mongodb://localhost/callbymeaningTEST', {
+mongoose.connect(process.env.ON_HEROKU == 1 ? 'mongodb://admin:' + process.env.MLAB_PASS + '@ds149724.mlab.com:49724/callbymeaning' : 'mongodb://localhost/callbymeaning', {
   useMongoClient: true
 });
 mongoose.Promise = global.Promise;
@@ -25,6 +25,9 @@ app.use(morgan('dev', {stream: accessLogStream}));
 app.get('/', function (req, res) {
   return res.send('<h1>Hello There :)</h1><br>Check <a href=./gbn>Get by name</a><br>Check <a href=./gbm>Get by meaning</a><br>Check <a href=./cbm>Call by meaning</a>');
 });
+
+var displayAll = require('./routes/displayAllRoutes');
+app.use('/all', displayAll);
 
 var getByName = require('./routes/getByNameRoutes');
 app.use('/gbn', getByName);
