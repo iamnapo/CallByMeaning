@@ -30,3 +30,7 @@ Every `Relation` document in the database contains the following parameters:
   * `start`: Reference. Contains the starting node of the relation.
   * `end`: Reference. Contains the ending node of the relation.
   * `mathRelation`: String. Contains the math relation that connects the two nodes, if applicable. (e.g. 'end = sqrt(start)' )
+
+## Note
+
+You can view every available object by sending a GET request to `~/all/{nodes|functions|relations}` or `~/all/{nodes|functions|relations}/{names|desriptions}`

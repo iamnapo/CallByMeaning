@@ -29,6 +29,22 @@ router.get('/nodes', function(req, res) {
   });
 });
 
+router.get('/nodes/names', function (req, res) {
+  Node.find({}, function (err, nodes) {
+    if (err) console.log(err);
+    if (nodes.length === 0) return res.status(418).send('There aren\'t any nodes.');
+    let temp = [];
+    for (let node of nodes) {
+      temp.push(node.name);
+    }
+    return res.json(temp);
+  });
+});
+
+router.all('/nodes/:anything', function (req, res) {
+  return res.status(404).send('Hmm... How did you end up here?');
+});
+
 router.get('/functions', function(req, res) {
   Function.find({}, function (err, funcs) {
     if (err) console.log(err);
@@ -45,6 +61,34 @@ router.get('/functions', function(req, res) {
     }
     return res.json(temp);
   });
+});
+
+router.get('/functions/names', function (req, res) {
+  Function.find({}, function (err, funcs) {
+    if (err) console.log(err);
+    if (funcs.length === 0) return res.status(418).send('There aren\'t any functions.');
+    let temp = [];
+    for (let func of funcs) {
+      temp.push(func.name);
+    }
+    return res.json(temp);
+  });
+});
+
+router.get('/functions/descriptions', function (req, res) {
+  Function.find({}, function (err, funcs) {
+    if (err) console.log(err);
+    if (funcs.length === 0) return res.status(418).send('There aren\'t any functions.');
+    let temp = [];
+    for (let func of funcs) {
+      temp.push(func.desc);
+    }
+    return res.json(temp);
+  });
+});
+
+router.all('/functions/:anything', function (req, res) {
+  return res.status(404).send('Hmm... How did you end up here?');
 });
 
 router.get('/relations', function(req, res) {
