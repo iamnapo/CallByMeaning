@@ -90,8 +90,8 @@ describe('CallByMeaning Server', function tests() {
 
       it('GET something that exists', function test(done) {
         this.timeout(TIMEOUT_TIME);
-        request.get(base_url + 'gbn/f/getTime', function (error, response, body) {
-          assert.ok(JSON.parse(body).name === 'getTime');
+        request.get(base_url + 'gbn/f/now', function (error, response, body) {
+          assert.ok(JSON.parse(body).name === 'now');
           done();
         });
       });
@@ -175,7 +175,7 @@ describe('CallByMeaning Server', function tests() {
       it('POST / returns a function if it exists', function test(done) {
         this.timeout(TIMEOUT_TIME);
         request.post({uri: base_url + 'gbm/search', form: {'outputNodes': ['time']}}, function (error, response, body) {
-          assert.ok(JSON.parse(body)[0].function === './js/getTime.js');
+          assert.ok(JSON.parse(body)[0].function === './js/now.js');
           done();
         });
       });
@@ -230,7 +230,7 @@ describe('CallByMeaning Server', function tests() {
 
       it('POST / can retrieve a function with given arguments if it is in DB (with same units)', function test(done) {
         this.timeout(TIMEOUT_TIME);
-        request.post({uri: base_url + 'cbm/call', form: {'outputNodes': ['time'], 'outputUnits': ['seconds']}}, function (error, response, body) {
+        request.post({uri: base_url + 'cbm/call', form: {'outputNodes': ['time'], 'outputUnits': ['milliseconds']}}, function (error, response, body) {
           assert.ok(JSON.parse(body) == eval(JSON.parse(body)));
           done();
         });
@@ -247,7 +247,7 @@ describe('CallByMeaning Server', function tests() {
       it('POST / can retrieve a function\'s code if returncode = true', function test(done) {
         this.timeout(TIMEOUT_TIME);
         request.post({uri: base_url + 'cbm/call', headers: {returncode: true}, form: {'outputNodes': ['time'], 'outputUnits': ['hours']}}, function (error, response, body) {
-          assert.ok(JSON.parse(body).function === './js/getTime.js');
+          assert.ok(JSON.parse(body).function === './js/now.js');
           done();
         });
       });

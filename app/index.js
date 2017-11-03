@@ -18,6 +18,7 @@ mongoose.Promise = global.Promise;
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use('/js', express.static(__dirname + '/../library'));
+app.use('/internal', express.static(__dirname + '/../library/internal'));
 app.use('/docs', express.static(__dirname + '/../docs'));
 var accessLogStream = fs.createWriteStream(path.join(__dirname, '../logs/access.log'), {flags: 'a'});
 app.use(morgan('dev', {stream: accessLogStream}));
