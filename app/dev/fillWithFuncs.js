@@ -131,55 +131,63 @@ function addNodesToDB(params) {
   }
 }
 
-function fixNodeFuncReferences() {
-  // find all functions
-  Function.find({}, function (err, funcs) {
-    if (err) console.error(err);
-    // for every function check all params
-    for (let func of funcs) {
-      // for every param find the corresponding instance in the Node collection and create a reference back and forth
-      for (let param of func.argsNames) {
-        Node.findOne({name: param}, function (err, node) {
-          if (err) console.error(err);
-          // Update Node instance
-          node.func_arg.push({id: func._id, name: func.name, unitType: func.argsUnits[func.argsNames.indexOf(param)]});
-          node.units.push(func.argsUnits[func.argsNames.indexOf(param)]);
-          node.units = node.units.filter((it, i, ar) => ar.indexOf(it) === i);
-          node.save();
-          // Update Function instance
-          func.args.push(node._id);
-          func.save();
-        });
+function fixNodeInFuncReferences() {
+  Node.find({}, function (err, nodes) {
+    if (err) console.log(err);
+    Function.find({}, function (err, funcs) {
+      if (err) console.log(err);
+      for (let func of funcs) {
+        for (let node of nodes) {
+          if (func.argsNames.indexOf(node.name) > -1) func.args.push(node._id);
+          if (func.returnsNames.indexOf(node.name) > -1) func.returns.push(node._id);
+        }
+        func.save();
       }
-      for (let param of func.returnsNames) {
-        Node.findOne({ name: param }, function (err, node) {
-          if (err) console.error(err);
-          // Update Node instance
-          node.func_res.push({ id: func._id, name: func.name, unitType: func.returnsUnits[func.returnsNames.indexOf(param)] });
-          node.units.push(func.returnsUnits[func.returnsNames.indexOf(param)]);
-          node.units = node.units.filter((it, i, ar) => ar.indexOf(it) === i);
-          node.save();
-          // Update Function instance
-          func.returns.push(node._id);
-          func.save();
-        });
+    });
+  });
+}
+
+function fixFuncInNodeReferences() {
+  Node.find({}, function (err, nodes) {
+    if (err) console.log(err);
+    Function.find({}, function (err, funcs) {
+      if (err) console.log(err);
+      for (let node of nodes) {
+        for (let func of funcs) {
+          for (let i = 0; i < func.argsNames.length; i++) {
+            if (func.argsNames[i] === node.name) {
+              node.func_arg.push({ id: func._id, name: func.name, unitType: func.argsUnits[i]});
+              node.units.push(func.argsUnits[i]);
+            }
+          }
+          for (let i = 0; i < func.returnsNames.length; i++) {
+            if (func.returnsNames[i] === node.name) {
+              node.func_res.push({id: func._id, name: func.name, unitType: func.returnsUnits[i]});
+              node.units.push(func.returnsUnits[i]);
+            }
+          }
+        }
+        node.units = [... new Set(node.units)];
+        node.markModified('units');
+        node.save();
       }
-    }
+    });
   });
 }
 
 function fillWithFuncs () {
-  // Create jsdoc .json file
-  //createFuncJSON();
   let funcs = getFunctions();
-  // first create an array with all the functions (name, desc, codeFile, argsNames, argsUnits, returnsNames, returnsUnits)
   let funcProperties = getFuncProperties(funcs);
-  // then use that array to create an object for each function in the DB
-  //addFuncsToDB(funcProperties);
-  // and lastly create/find corresponding nodes and fix references
   let params = getParams(funcs);
-  //addNodesToDB(params);
-  fixNodeFuncReferences();
+  let funcsTorun = [
+    function () { createFuncJSON(); },
+    function () { addFuncsToDB(funcProperties); },
+    function () { addNodesToDB(params); },
+    function () { fixNodeInFuncReferences(); },
+    function () { fixFuncInNodeReferences(); },
+    function () { console.log('DONE!'); }
+  ];
+  funcsTorun.forEach(function (func) {func();});
 }
 
 module.exports = fillWithFuncs;
