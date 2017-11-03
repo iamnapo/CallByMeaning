@@ -45,7 +45,6 @@ app.all('/:anything', function (req, res) {
 var server = app.listen(port, function () {
   if (process.env.ON_HEROKU == 0) {
     console.log('Server ' + chalk.green('started') + ' at http://localhost:%s. Have fun. 😀', port);
-    // var fillWithFuncs = require('./dev/fillWithFuncs'); fillWithFuncs();
   } else {
     console.log('Server ' + chalk.green('started') + '. Have fun. 😀');
   }

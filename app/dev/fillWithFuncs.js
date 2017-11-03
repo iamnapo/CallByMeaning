@@ -4,6 +4,7 @@ var shell = require('shelljs');
 
 var Node = require('../models/node');
 var Function = require('../models/function');
+var Relation = require('../models/relation');
 
 function createFuncJSON() {
   shell.exec('rm -f ./app/dev/funcs.json');
@@ -175,6 +176,78 @@ function fixFuncInNodeReferences() {
   });
 }
 
+function fixRelations() {
+  Relation.create({
+    name: 'requiredBy',
+    desc: 'First node is required to define/give meaning to second node.'
+  });
+  Relation.create({
+    name: 'representsA',
+    desc: 'First node is a different representation of second node'
+  });
+  Relation.create({
+    name: 'unitConversion',
+    desc: 'The two nodes are differents unit of measurement of the same thing.'
+  });
+
+  Node.create({
+    name: 'hours',
+    desc: 'Unit of measurement of time.',
+    units: ['hours']
+  });
+
+  Node.create({
+    name: 'seconds',
+    desc: 'Unit of measurement of time.',
+    units: ['seconds']
+  });
+
+  Node.create({
+    name: 'milliseconds',
+    desc: 'Unit of measurement of time.',
+    units: ['milliseconds']
+  });
+
+  // 'unitConversion'
+  Node.findOne({name: 'hours' }, function (err, nodeA) {
+    if (err) console.log(err);
+    Node.findOne({ name: 'seconds' }, function (err, nodeB) {
+      if (err) console.log(err);
+      Relation.findOne({ name: 'unitConversion' }, function (err, relation) {
+        if (err) console.log(err);
+        var start = {
+          id: nodeA._id,
+          name: nodeA.name
+        };
+        var end = {
+          id: nodeB._id,
+          name: nodeB.name
+        };
+        relation.connects.push({ start: start, end: end, mathRelation: 'start / 60' });
+        relation.connects.push({start: end, end: start, mathRelation: 'start * 60'});
+        relation.save();
+      });
+    });
+    Node.findOne({ name: 'milliseconds' }, function (err, nodeB) {
+      if (err) console.log(err);
+      Relation.findOne({ name: 'unitConversion' }, function (err, relation) {
+        if (err) console.log(err);
+        var start = {
+          id: nodeA._id,
+          name: nodeA.name
+        };
+        var end = {
+          id: nodeB._id,
+          name: nodeB.name
+        };
+        relation.connects.push({ start: start, end: end, mathRelation: 'start / 3600000' });
+        relation.connects.push({ start: end, end: start, mathRelation: 'start * 3600000' });
+        relation.save();
+      });
+    });
+  });
+}
+
 function fillWithFuncs () {
   let funcs = getFunctions();
   let funcProperties = getFuncProperties(funcs);
@@ -185,6 +258,7 @@ function fillWithFuncs () {
     function () { addNodesToDB(params); },
     function () { fixNodeInFuncReferences(); },
     function () { fixFuncInNodeReferences(); },
+    function () { fixRelations(); },
     function () { console.log('DONE!'); }
   ];
   funcsTorun.forEach(function (func) {func();});

@@ -1,4 +1,4 @@
-var createWrap = require('./_createWrap');
+var createWrap = require('./internal/_createWrap');
 
 'use strict';
 

@@ -1,8 +1,8 @@
-var assignValue = require('./_assignValue'),
-  copyObject = require('./_copyObject'),
-  createAssigner = require('./_createAssigner'),
+var assignValue = require('./internal/_assignValue'),
+  copyObject = require('./internal/_copyObject'),
+  createAssigner = require('./internal/_createAssigner'),
   isArrayLike = require('./isArrayLike'),
-  isPrototype = require('./_isPrototype'),
+  isPrototype = require('./internal/_isPrototype'),
   keys = require('./keys');
 
 'use strict';

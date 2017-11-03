@@ -1,5 +1,5 @@
-var baseAt = require('./_baseAt'),
-  flatRest = require('./_flatRest');
+var baseAt = require('./internal/_baseAt'),
+  flatRest = require('./internal/_flatRest');
 
 'use strict';
 

@@ -1,5 +1,5 @@
 var capitalize = require('./capitalize'),
-  createCompounder = require('./_createCompounder');
+  createCompounder = require('./internal/_createCompounder');
 
 'use strict';
 
@@ -12,7 +12,7 @@ var capitalize = require('./capitalize'),
  * @category String
  * @param {string} string  A sequence of characters.
  * @author string
- * @returns {camel_case_string} A camel cased string.
+ * @returns {camel_cased} A camel cased string.
  * @example
  *
  * _.camelCase('Foo Bar');

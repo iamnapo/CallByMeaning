@@ -1,7 +1,7 @@
-var baseRest = require('./_baseRest'),
-  createWrap = require('./_createWrap'),
-  getHolder = require('./_getHolder'),
-  replaceHolders = require('./_replaceHolders');
+var baseRest = require('./internal/_baseRest'),
+  createWrap = require('./internal/_createWrap'),
+  getHolder = require('./internal/_getHolder'),
+  replaceHolders = require('./internal/_replaceHolders');
 
 'use strict';
 

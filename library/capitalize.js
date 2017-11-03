@@ -13,7 +13,7 @@ var toString = require('./toString'),
  * @category String
  * @param {string} string The string to capitalize.
  * @author string
- * @returns {capitalized_string} A capitalized string.
+ * @returns {capitalized} A capitalized string.
  * @example
  *
  * _.capitalize('FRED');

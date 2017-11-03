@@ -1,4 +1,4 @@
-var createMathOperation = require('./_createMathOperation');
+var createMathOperation = require('./internal/_createMathOperation');
 
 'use strict';
 

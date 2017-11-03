@@ -1,5 +1,5 @@
-var apply = require('./_apply'),
-  baseRest = require('./_baseRest'),
+var apply = require('./internal/_apply'),
+  baseRest = require('./internal/_baseRest'),
   isError = require('./isError');
 
 'use strict';

@@ -1,8 +1,8 @@
-var arrayEach = require('./_arrayEach'),
-  baseAssignValue = require('./_baseAssignValue'),
+var arrayEach = require('./internal/_arrayEach'),
+  baseAssignValue = require('./internal/_baseAssignValue'),
   bind = require('./bind'),
-  flatRest = require('./_flatRest'),
-  toKey = require('./_toKey');
+  flatRest = require('./internal/_flatRest'),
+  toKey = require('./internal/_toKey');
 
 'use strict';
 
