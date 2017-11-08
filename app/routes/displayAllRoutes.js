@@ -1,19 +1,19 @@
 'use strict';
 
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = new express.Router();
 
-var Node = require('../models/node');
-var Function = require('../models/function');
-var Relation = require('../models/relation');
+const Node = require('../models/node');
+const Function = require('../models/function');
+const Relation = require('../models/relation');
 
-router.get('/', function (req, res) {
+router.get('/', (req, res) => {
   return res.send('Hello.<br> Check <a href=./all/nodes>nodes</a><br>Check <a href=./all/functions>functions</a><br>Check <a href=./all/relations>relations</a>');
 });
 
-router.get('/nodes', function(req, res) {
-  Node.find({}, function (err, nodes) {
-    if (err) console.log(err);
+router.get('/nodes', (req, res) => {
+  Node.find({}, (err, nodes) => {
+    if (err) console.error(err);
     if (nodes.length === 0) return res.status(418).send('There aren\'t any nodes.');
     let temp = [];
     for (let node of nodes) {
@@ -21,7 +21,7 @@ router.get('/nodes', function(req, res) {
         {
           name: node.name,
           description: node.desc,
-          units: node.units
+          units: node.units,
         }
       );
     }
@@ -29,9 +29,9 @@ router.get('/nodes', function(req, res) {
   });
 });
 
-router.get('/nodes/names', function (req, res) {
-  Node.find({}, function (err, nodes) {
-    if (err) console.log(err);
+router.get('/nodes/names', (req, res) => {
+  Node.find({}, (err, nodes) => {
+    if (err) console.error(err);
     if (nodes.length === 0) return res.status(418).send('There aren\'t any nodes.');
     let temp = [];
     for (let node of nodes) {
@@ -41,13 +41,13 @@ router.get('/nodes/names', function (req, res) {
   });
 });
 
-router.all('/nodes/:anything', function (req, res) {
+router.all('/nodes/:anything', (req, res) => {
   return res.status(404).send('Hmm... How did you end up here?');
 });
 
-router.get('/functions', function(req, res) {
-  Function.find({}, function (err, funcs) {
-    if (err) console.log(err);
+router.get('/functions', (req, res) => {
+  Function.find({}, (err, funcs) => {
+    if (err) console.error(err);
     if (funcs.length === 0) return res.status(418).send('There aren\'t any functions.');
     let temp = [];
     for (let func of funcs) {
@@ -55,7 +55,7 @@ router.get('/functions', function(req, res) {
         {
           name: func.name,
           description: func.desc,
-          source_code: func.codeFile
+          source_code: func.codeFile,
         }
       );
     }
@@ -63,9 +63,9 @@ router.get('/functions', function(req, res) {
   });
 });
 
-router.get('/functions/names', function (req, res) {
-  Function.find({}, function (err, funcs) {
-    if (err) console.log(err);
+router.get('/functions/names', (req, res) => {
+  Function.find({}, (err, funcs) => {
+    if (err) console.error(err);
     if (funcs.length === 0) return res.status(418).send('There aren\'t any functions.');
     let temp = [];
     for (let func of funcs) {
@@ -75,9 +75,9 @@ router.get('/functions/names', function (req, res) {
   });
 });
 
-router.get('/functions/descriptions', function (req, res) {
-  Function.find({}, function (err, funcs) {
-    if (err) console.log(err);
+router.get('/functions/descriptions', (req, res) => {
+  Function.find({}, (err, funcs) => {
+    if (err) console.error(err);
     if (funcs.length === 0) return res.status(418).send('There aren\'t any functions.');
     let temp = [];
     for (let func of funcs) {
@@ -87,20 +87,20 @@ router.get('/functions/descriptions', function (req, res) {
   });
 });
 
-router.all('/functions/:anything', function (req, res) {
+router.all('/functions/:anything', (req, res) => {
   return res.status(404).send('Hmm... How did you end up here?');
 });
 
-router.get('/relations', function(req, res) {
-  Relation.find({}, function (err, relations) {
-    if (err) console.log(err);
+router.get('/relations', (req, res) => {
+  Relation.find({}, (err, relations) => {
+    if (err) console.error(err);
     if (relations.length === 0) return res.status(418).send('There aren\'t any relations.');
     let temp = [];
     for (let relation of relations) {
       temp.push(
         {
           name: relation.name,
-          description: relation.desc
+          description: relation.desc,
         }
       );
     }
@@ -108,7 +108,11 @@ router.get('/relations', function(req, res) {
   });
 });
 
-router.all('/:anything', function (req, res) {
+router.all('/relations/:anything', (req, res) => {
+  return res.status(404).send('Hmm... How did you end up here?');
+});
+
+router.all('/:anything', (req, res) => {
   return res.status(404).send('Hmm... How did you end up here?');
 });
 

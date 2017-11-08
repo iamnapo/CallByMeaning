@@ -1,10 +1,10 @@
 'use strict';
 
-var shell = require('shelljs');
+const shell = require('shelljs');
 
-var Node = require('../models/node');
-var Function = require('../models/function');
-var Relation = require('../models/relation');
+const Node = require('../models/node');
+const Function = require('../models/function');
+const Relation = require('../models/relation');
 
 function createFuncJSON() {
   shell.exec('rm -f ./app/dev/funcs.json');
@@ -16,7 +16,7 @@ function createFuncJSON() {
   }
 }
 
-function getFunctions () {
+function getFunctions() {
   let allFuncs = require('./funcs.json'); // even those not exported
   let temp = [];
   for (let func of allFuncs) {
@@ -37,7 +37,7 @@ function getFuncProperties(funcs) {
       argsNames: getArgs(func).names,
       argsUnits: getArgs(func).units,
       returnsNames: getReturns(func).names,
-      returnsUnits: getReturns(func).units
+      returnsUnits: getReturns(func).units,
     });
   }
   return temp;
@@ -80,8 +80,8 @@ function addFuncsToDB(funcProperties) {
       argsNames: func.argsNames,
       argsUnits: func.argsUnits,
       returnsNames: func.returnsNames,
-      returnsUnits: func.returnsUnits
-    }, function (err) {
+      returnsUnits: func.returnsUnits,
+    }, function(err) {
       if (err) console.error(err);
     });
   }
@@ -108,10 +108,10 @@ function getParams(funcs) {
     }
   }
   let names = new Set();
-  temp.forEach(function (param) {
+  temp.forEach(function(param) {
     names.add(param.name);
   });
-  let temp2 = temp.filter(function (param) {
+  let temp2 = temp.filter(function(param) {
     if (names.has(param.name)) {
       names.delete(param.name);
       return true;
@@ -125,17 +125,17 @@ function addNodesToDB(params) {
   for (let param of params) {
     Node.create({
       name: param.name,
-      desc: param.desc
-    }, function (err) {
+      desc: param.desc,
+    }, function(err) {
       if (err) console.error(err);
     });
   }
 }
 
 function fixNodeInFuncReferences() {
-  Node.find({}, function (err, nodes) {
+  Node.find({}, function(err, nodes) {
     if (err) console.log(err);
-    Function.find({}, function (err, funcs) {
+    Function.find({}, function(err, funcs) {
       if (err) console.log(err);
       for (let func of funcs) {
         for (let node of nodes) {
@@ -149,15 +149,15 @@ function fixNodeInFuncReferences() {
 }
 
 function fixFuncInNodeReferences() {
-  Node.find({}, function (err, nodes) {
+  Node.find({}, function(err, nodes) {
     if (err) console.log(err);
-    Function.find({}, function (err, funcs) {
+    Function.find({}, function(err, funcs) {
       if (err) console.log(err);
       for (let node of nodes) {
         for (let func of funcs) {
           for (let i = 0; i < func.argsNames.length; i++) {
             if (func.argsNames[i] === node.name) {
-              node.func_arg.push({ id: func._id, name: func.name, unitType: func.argsUnits[i]});
+              node.func_arg.push({id: func._id, name: func.name, unitType: func.argsUnits[i]});
               node.units.push(func.argsUnits[i]);
             }
           }
@@ -168,7 +168,7 @@ function fixFuncInNodeReferences() {
             }
           }
         }
-        node.units = [... new Set(node.units)];
+        node.units = [...new Set(node.units)];
         node.markModified('units');
         node.save();
       }
@@ -176,92 +176,116 @@ function fixFuncInNodeReferences() {
   });
 }
 
-function fixRelations() {
+function createRelations() {
   Relation.create({
     name: 'requiredBy',
-    desc: 'First node is required to define/give meaning to second node.'
+    desc: 'First node is required to define/give meaning to second node.',
   });
   Relation.create({
     name: 'representsA',
-    desc: 'First node is a different representation of second node'
+    desc: 'First node is a different representation of second node',
   });
   Relation.create({
     name: 'unitConversion',
-    desc: 'The two nodes are differents unit of measurement of the same thing.'
+    desc: 'The two nodes are differents unit of measurement of the same thing.',
   });
 
   Node.create({
     name: 'hours',
     desc: 'Unit of measurement of time.',
-    units: ['hours']
+    units: ['hours'],
   });
 
   Node.create({
     name: 'seconds',
     desc: 'Unit of measurement of time.',
-    units: ['seconds']
+    units: ['seconds'],
   });
 
   Node.create({
     name: 'milliseconds',
     desc: 'Unit of measurement of time.',
-    units: ['milliseconds']
+    units: ['milliseconds'],
   });
 
   // 'unitConversion'
-  Node.findOne({name: 'hours' }, function (err, nodeA) {
+  Node.findOne({name: 'hours'}, function(err, nodeA) {
     if (err) console.log(err);
-    Node.findOne({ name: 'seconds' }, function (err, nodeB) {
+    Node.findOne({name: 'seconds'}, function(err, nodeB) {
       if (err) console.log(err);
-      Relation.findOne({ name: 'unitConversion' }, function (err, relation) {
+      Relation.findOne({name: 'unitConversion'}, function(err, relation) {
         if (err) console.log(err);
-        var start = {
+        let start = {
           id: nodeA._id,
-          name: nodeA.name
+          name: nodeA.name,
         };
-        var end = {
+        let end = {
           id: nodeB._id,
-          name: nodeB.name
+          name: nodeB.name,
         };
-        relation.connects.push({ start: start, end: end, mathRelation: 'start / 60' });
+        relation.connects.push({start: start, end: end, mathRelation: 'start / 60'});
         relation.connects.push({start: end, end: start, mathRelation: 'start * 60'});
         relation.save();
       });
     });
-    Node.findOne({ name: 'milliseconds' }, function (err, nodeB) {
+    Node.findOne({name: 'milliseconds'}, function(err, nodeB) {
       if (err) console.log(err);
-      Relation.findOne({ name: 'unitConversion' }, function (err, relation) {
+      Relation.findOne({name: 'unitConversion'}, function(err, relation) {
         if (err) console.log(err);
-        var start = {
+        let start = {
           id: nodeA._id,
-          name: nodeA.name
+          name: nodeA.name,
         };
-        var end = {
+        let end = {
           id: nodeB._id,
-          name: nodeB.name
+          name: nodeB.name,
         };
-        relation.connects.push({ start: start, end: end, mathRelation: 'start / 3600000' });
-        relation.connects.push({ start: end, end: start, mathRelation: 'start * 3600000' });
+        relation.connects.push({start: start, end: end, mathRelation: 'start / 3600000'});
+        relation.connects.push({start: end, end: start, mathRelation: 'start * 3600000'});
         relation.save();
       });
     });
   });
 }
 
-function fillWithFuncs () {
+function fixRelations() {
+  Node.find({}, function(err, nodes) {
+    if (err) console.error(err);
+    Relation.findOne({name: 'unitConversion'}, (err, relation) => {
+      if (err) console.error(err);
+      for (let connection of relation.connects) {
+        for (let node of nodes) {
+          if (connection.start.name.indexOf(node.name) > -1) connection.start.id = (node._id);
+          if (connection.end.name.indexOf(node.name) > -1) connection.end.id = (node._id);
+        }
+      }
+      relation.markModified('connects');
+      relation.save();
+    });
+  });
+}
+
+function fillWithFuncs() {
   let funcs = getFunctions();
   let funcProperties = getFuncProperties(funcs);
   let params = getParams(funcs);
   let funcsTorun = [
-    function () { createFuncJSON(); },
-    function () { addFuncsToDB(funcProperties); },
-    function () { addNodesToDB(params); },
-    function () { fixNodeInFuncReferences(); },
-    function () { fixFuncInNodeReferences(); },
-    function () { fixRelations(); },
-    function () { console.log('DONE!'); }
+    () => createFuncJSON(),
+    () => addFuncsToDB(funcProperties),
+    () => addNodesToDB(params),
+    () => fixNodeInFuncReferences(),
+    () => fixFuncInNodeReferences(),
+    () => createRelations(),
+    () => fixRelations(),
+    () => console.log('DONE!'),
   ];
-  funcsTorun.forEach(function (func) {func();});
+  funcsTorun.forEach((func) => func());
 }
 
-module.exports = fillWithFuncs;
+module.exports =
+{
+  'fillWithFuncs': fillWithFuncs,
+  'fixNodeInFuncReferences': fixNodeInFuncReferences,
+  'fixFuncInNodeReferences': fixFuncInNodeReferences,
+  'fixRelations': fixRelations,
+};

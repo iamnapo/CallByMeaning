@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Gets the a birth-date and returns the corresponding astrological sign. 
+ * Gets the a birth-date and returns the corresponding astrological sign.
  *
  * @static
  * @memberOf _

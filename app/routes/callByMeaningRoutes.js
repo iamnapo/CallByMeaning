@@ -1,35 +1,35 @@
 'use strict';
 
-var express = require('express');
-var router = express.Router();
-var request = require('request');
-var math = require('mathjs');
+const express = require('express');
+const router = new express.Router();
+const request = require('request');
+const math = require('mathjs');
 
-var Function = require('../models/function');
-var Relation = require('../models/relation');
+const Function = require('../models/function');
+const Relation = require('../models/relation');
 
-router.get('/', function (req, res) {
+router.get('/', (req, res) => {
   return res.send('Hello. This is the path to call a function by meaning. Detailed information can be found <a href=https://github.com/iamnapo/CallByMeaning/>here</a>. Check <a href=../cbm/call>this</a>');
 });
 
-router.get('/call', function (req, res) {
+router.get('/call', (req, res) => {
   return res.send('This is the path to use for calling. Send a POST request with the parameters in its body.');
 });
 
-router.post('/call', function (req, res) {
+router.post('/call', (req, res) => {
   req.body.inputNodes = req.body.inputNodes || [];
   req.body.inputUnits = req.body.inputUnits || [];
   req.body.inputVars = req.body.inputVars || [];
   req.body.outputNodes = req.body.outputNodes || [];
   req.body.outputUnits = req.body.outputUnits || [];
-  var returnCode = eval(req.headers.returncode) || false;
+  let returnCode = eval(req.headers.returncode) || false;
   // Get what the inputs are, their values and in what units
-  var inputNodes = req.body.inputNodes instanceof Object ? req.body.inputNodes : req.body.inputNodes.split(' ').join('').split(',');
-  var inputUnits = req.body.inputUnits instanceof Object ? req.body.inputUnits : req.body.inputUnits.split(' ').join('').split(',');
-  var inputVars = req.body.inputVars instanceof Object ? req.body.inputVars : req.body.inputVars.split(' ').join('').split(',');
+  let inputNodes = req.body.inputNodes instanceof Object ? req.body.inputNodes : req.body.inputNodes.split(' ').join('').split(',');
+  let inputUnits = req.body.inputUnits instanceof Object ? req.body.inputUnits : req.body.inputUnits.split(' ').join('').split(',');
+  let inputVars = req.body.inputVars instanceof Object ? req.body.inputVars : req.body.inputVars.split(' ').join('').split(',');
   // Get what results the caller wants and in what units
-  var outputNodes = req.body.outputNodes instanceof Object ? req.body.outputNodes : req.body.outputNodes.split(' ').join('').split(',');
-  var outputUnits = req.body.outputUnits instanceof Object ? req.body.outputUnits : req.body.outputUnits.split(' ').join('').split(',');
+  let outputNodes = req.body.outputNodes instanceof Object ? req.body.outputNodes : req.body.outputNodes.split(' ').join('').split(',');
+  let outputUnits = req.body.outputUnits instanceof Object ? req.body.outputUnits : req.body.outputUnits.split(' ').join('').split(',');
   if (outputNodes == null || outputNodes.length !== outputUnits.length) {
     return res.status(400).send('A function must have at least one output and every output must have its unit.');
   }
@@ -40,15 +40,15 @@ router.post('/call', function (req, res) {
     if (err) console.log(err);
     if (response.statusCode !== 200) return res.status(response.statusCode).send(body);
     // If I'm here body.codefile, body.desc contains the functions with the asked inputs and outputs (but maybe in different units)
-    Function.findOne({codeFile: JSON.parse(body)[0].function}, function (err, result) {
+    Function.findOne({codeFile: JSON.parse(body)[0].function}, (err, result) => {
       if (err) console.log(err);
-      Function.find({argsNames: result.argsNames, returnsNames: result.returnsNames}).populate('results').exec(function (err, funcs) {
+      Function.find({argsNames: result.argsNames, returnsNames: result.returnsNames}).populate('results').exec((err, funcs) => {
         if (err) console.log(err);
         let funcsChecked = 0;
         for (let func of funcs) {
           funcsChecked++;
           if (res.headersSent) break;
-          var correctInputs = [];
+          let correctInputs = [];
           if (inputUnits.length !== 0) {
             for (let i = 0; i < inputUnits.length; i++) {
               if (res.headersSent) break;
@@ -58,7 +58,7 @@ router.post('/call', function (req, res) {
                 continue;
               } else {
                 // find "unitConversion" relation
-                Relation.findOne({name: 'unitConversion'}, function (err, relation) {
+                Relation.findOne({name: 'unitConversion'}, (err, relation) => {
                   if (err) console.log(err);
                   for (let connection of relation.connects) {
                     if (res.headersSent) break;
@@ -80,21 +80,21 @@ router.post('/call', function (req, res) {
               }
             }
           }
-          //calculate result or return relevant code
+          // calculate result or return relevant code
           if (returnCode) {
-            var codeRes = {
+            let codeRes = {
               function: func.codeFile,
-              desc: func.desc
+              desc: func.desc,
             };
             return res.json(codeRes);
           }
-          var funcToRun = require('../../library/' + func.codeFile.substring(5));
-          var funcResult = funcToRun.apply(null, correctInputs);
+          let funcToRun = require('../../library/' + func.codeFile.substring(5));
+          let funcResult = funcToRun(...correctInputs);
           if (func.returnsUnits[0] === outputUnits[0]) {
             return res.send(JSON.stringify(funcResult));
           }
           // find "unitConversion" relation
-          Relation.findOne({name: 'unitConversion'}, function (err, relation) {
+          Relation.findOne({name: 'unitConversion'}, (err, relation) => {
             for (let connection of relation.connects) {
               if (res.headersSent) break;
               // if I find the correct connection
@@ -114,11 +114,11 @@ router.post('/call', function (req, res) {
   });
 });
 
-router.all('/:anything', function (req, res) {
+router.all('/:anything', (req, res) => {
   return res.status(404).send('Hmm... How did you end up here?');
 });
 
-router.all('/call/:anything', function (req, res) {
+router.all('/call/:anything', (req, res) => {
   return res.status(404).send('Hmm... How did you end up here?');
 });
 

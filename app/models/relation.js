@@ -1,30 +1,30 @@
 'use strict';
 
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var relationSchema = new mongoose.Schema({
+let relationSchema = new mongoose.Schema({
   name: {
     type: String,
-    unique: true
+    unique: true,
   },
   desc: String,
   connects: [{
     start: {
       id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Node'
+        ref: 'Node',
       },
-      name: String
+      name: String,
     },
     end: {
       id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Node'
+        ref: 'Node',
       },
-      name: String
+      name: String,
     },
-    mathRelation: String
-  }]
+    mathRelation: String,
+  }],
 });
 
 module.exports = mongoose.model('Relation', relationSchema);

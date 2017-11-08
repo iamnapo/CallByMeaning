@@ -1,25 +1,25 @@
 'use strict';
 
-var express = require('express');
-var router = express.Router();
-var request = require('request');
+const express = require('express');
+const router = new express.Router();
+const request = require('request');
 
-var Function = require('../models/function');
+const Function = require('../models/function');
 
-router.get('/', function (req, res) {
+router.get('/', (req, res) => {
   return res.send('Hello. This is the path to search by meaning. Detailed information can be found <a href=https://github.com/iamnapo/CallByMeaning/>here</a>. Check <a href=../gbm/search>/search</a>');
 });
 
-router.get('/search', function (req, res) {
+router.get('/search', (req, res) => {
   return res.send('This is the path to use for searching. Send a POST request with the parameters in its body.');
 });
 
-router.post('/search', function (req, res) {
+router.post('/search', (req, res) => {
   req.body.inputNodes = req.body.inputNodes || [];
   if (req.body.outputNodes == null) return res.status(400).send('A function must have at least one output');
-  var inputNodes = req.body.inputNodes instanceof Object ? req.body.inputNodes : req.body.inputNodes.split(' ').join('').split(',');
-  var outputNodes = req.body.outputNodes instanceof Object ? req.body.outputNodes : req.body.outputNodes.split(' ').join('').split(',');
-  Function.find({argsNames: inputNodes, returnsNames: outputNodes}, function (err, funcs) {
+  let inputNodes = req.body.inputNodes instanceof Object ? req.body.inputNodes : req.body.inputNodes.split(' ').join('').split(',');
+  let outputNodes = req.body.outputNodes instanceof Object ? req.body.outputNodes : req.body.outputNodes.split(' ').join('').split(',');
+  Function.find({argsNames: inputNodes, returnsNames: outputNodes}, (err, funcs) => {
     if (err) console.log(err);
     if (funcs.length !== 0) {
       let temp = [];
@@ -35,7 +35,7 @@ router.post('/search', function (req, res) {
         outputNodes[i] = JSON.parse(body).name;
         if (i === outputNodes.length - 1) {
           if (inputNodes.length === 0) {
-            Function.find({argsNames: inputNodes, returnsNames: outputNodes}, function (err, funcs) {
+            Function.find({argsNames: inputNodes, returnsNames: outputNodes}, (err, funcs) => {
               if (err) console.log(err);
               if (funcs.length !== 0) {
                 let temp = [];
@@ -53,7 +53,7 @@ router.post('/search', function (req, res) {
                 if (response.statusCode !== 200) return res.status(418).send('Could not interpret the node: ' + inputNodes[j]);
                 outputNodes[i] = JSON.parse(body).name;
                 if (j === inputNodes.length - 1) {
-                  Function.find({argsNames: inputNodes, returnsNames: outputNodes}, function (err, funcs) {
+                  Function.find({argsNames: inputNodes, returnsNames: outputNodes}, (err, funcs) => {
                     if (err) console.log(err);
                     if (funcs.length !== 0) {
                       let temp = [];
@@ -74,11 +74,11 @@ router.post('/search', function (req, res) {
   });
 });
 
-router.all('/:anything', function (req, res) {
+router.all('/:anything', (req, res) => {
   return res.status(404).send('Hmm... How did you end up here?');
 });
 
-router.all('/search/:anything', function (req, res) {
+router.all('/search/:anything', (req, res) =>{
   return res.status(404).send('Hmm... How did you end up here?');
 });
 

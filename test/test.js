@@ -1,34 +1,31 @@
 /* eslint-env node, mocha */
+/* eslint no-invalid-this: "off" */
 
 'use strict';
 
-var chai = require('chai');
-var assert = chai.assert;
-var request = require('request');
-var server = require('../app/index.js');
-var base_url = 'http://localhost:3000/';
+const chai = require('chai');
+const assert = chai.assert;
+const request = require('request');
+const server = require('../app/index.js');
+const baseUrl = 'http://localhost:3000/';
 
 const TIMEOUT_TIME = 3000;
 
 describe('CallByMeaning Server', function tests() {
-
-  describe('Initial', function test() {
-
+  describe('Initial', function done() {
     it('GET / returns status code 200', function test(done) {
       this.timeout(TIMEOUT_TIME);
-      request.get(base_url, function (error, response) {
+      request.get(baseUrl, (error, response) => {
         assert.ok(response.statusCode === 200);
         done();
       });
     });
-
   });
 
   describe('/gbn', function test() {
-
     it('GET / returns status code 200', function test(done) {
       this.timeout(TIMEOUT_TIME);
-      request.get(base_url + 'gbn/', function (error, response) {
+      request.get(baseUrl + 'gbn/', function(error, response) {
         assert.ok(response.statusCode === 200);
         done();
       });
@@ -36,17 +33,16 @@ describe('CallByMeaning Server', function tests() {
 
     it('GET /<everythingelse> returns status code 404', function test(done) {
       this.timeout(TIMEOUT_TIME);
-      request.get(base_url + 'gbn/alsdlasd', function (error, response) {
+      request.get(baseUrl + 'gbn/alsdlasd', function(error, response) {
         assert(response.statusCode === 404);
         done();
       });
     });
 
     describe('/c', function test() {
-
       it('GET / returns status code 200', function test(done) {
         this.timeout(TIMEOUT_TIME);
-        request.get(base_url + 'gbn/c', function (error, response) {
+        request.get(baseUrl + 'gbn/c', function(error, response) {
           assert.ok(response.statusCode === 200);
           done();
         });
@@ -54,7 +50,7 @@ describe('CallByMeaning Server', function tests() {
 
       it('GET something that exists', function test(done) {
         this.timeout(TIMEOUT_TIME);
-        request.get(base_url + 'gbn/c/time', function (error, response, body) {
+        request.get(baseUrl + 'gbn/c/time', function(error, response, body) {
           assert.ok(JSON.parse(body).name === 'time');
           done();
         });
@@ -62,7 +58,7 @@ describe('CallByMeaning Server', function tests() {
 
       it('GET something that doesn\'t exist, but a similar one does', function test(done) {
         this.timeout(TIMEOUT_TIME);
-        request.get(base_url + 'gbn/c/clock', function (error, response, body) {
+        request.get(baseUrl + 'gbn/c/clock', function(error, response, body) {
           assert.ok(JSON.parse(body).name === 'time');
           done();
         });
@@ -70,19 +66,17 @@ describe('CallByMeaning Server', function tests() {
 
       it('GET something that doesn\'t exist has status code 418', function test(done) {
         this.timeout(TIMEOUT_TIME);
-        request.get(base_url + 'gbn/c/blalasda', function (error, response) {
+        request.get(baseUrl + 'gbn/c/blalasda', function(error, response) {
           assert.ok(response.statusCode === 418);
           done();
         });
       });
-
     });
 
     describe('/f', function test() {
-
       it('GET / returns status code 200', function test(done) {
         this.timeout(TIMEOUT_TIME);
-        request.get(base_url + 'gbn/f', function (error, response) {
+        request.get(baseUrl + 'gbn/f', function(error, response) {
           assert.ok(response.statusCode === 200);
           done();
         });
@@ -90,7 +84,7 @@ describe('CallByMeaning Server', function tests() {
 
       it('GET something that exists', function test(done) {
         this.timeout(TIMEOUT_TIME);
-        request.get(base_url + 'gbn/f/now', function (error, response, body) {
+        request.get(baseUrl + 'gbn/f/now', function(error, response, body) {
           assert.ok(JSON.parse(body).name === 'now');
           done();
         });
@@ -98,19 +92,17 @@ describe('CallByMeaning Server', function tests() {
 
       it('GET something that doesn\'t exist has status code 418', function test(done) {
         this.timeout(TIMEOUT_TIME);
-        request.get(base_url + 'gbn/f/blalasda', function (error, response) {
+        request.get(baseUrl + 'gbn/f/blalasda', function(error, response) {
           assert.ok(response.statusCode === 418);
           done();
         });
       });
-
     });
 
     describe('/r', function test() {
-
       it('GET / returns status code 200', function test(done) {
         this.timeout(TIMEOUT_TIME);
-        request.get(base_url + 'gbn/r', function (error, response) {
+        request.get(baseUrl + 'gbn/r', function(error, response) {
           assert.ok(response.statusCode === 200);
           done();
         });
@@ -118,7 +110,7 @@ describe('CallByMeaning Server', function tests() {
 
       it('GET something that exists', function test(done) {
         this.timeout(TIMEOUT_TIME);
-        request.get(base_url + 'gbn/r/unitConversion', function (error, response, body) {
+        request.get(baseUrl + 'gbn/r/unitConversion', function(error, response, body) {
           assert.ok(JSON.parse(body).name === 'unitConversion');
           done();
         });
@@ -126,21 +118,18 @@ describe('CallByMeaning Server', function tests() {
 
       it('GET something that doesn\'t exist has status code 418', function test(done) {
         this.timeout(TIMEOUT_TIME);
-        request.get(base_url + 'gbn/r/blalasda', function (error, response) {
+        request.get(baseUrl + 'gbn/r/blalasda', function(error, response) {
           assert.ok(response.statusCode === 418);
           done();
         });
       });
-
     });
-
   });
 
   describe('/gbm', function test() {
-
     it('GET / returns status code 200', function test(done) {
       this.timeout(TIMEOUT_TIME);
-      request.get(base_url + 'gbm/', function (error, response) {
+      request.get(baseUrl + 'gbm/', function(error, response) {
         assert.ok(response.statusCode === 200);
         done();
       });
@@ -148,17 +137,16 @@ describe('CallByMeaning Server', function tests() {
 
     it('GET /<everythingelse> returns status code 404', function test(done) {
       this.timeout(TIMEOUT_TIME);
-      request.get(base_url + 'gbm/alsdlasd', function (error, response) {
+      request.get(baseUrl + 'gbm/alsdlasd', function(error, response) {
         assert(response.statusCode === 404);
         done();
       });
     });
 
     describe('/search', function test() {
-
       it('GET / returns status code 200', function test(done) {
         this.timeout(TIMEOUT_TIME);
-        request.get(base_url + 'gbm/search', function (error, response) {
+        request.get(baseUrl + 'gbm/search', function(error, response) {
           assert.ok(response.statusCode === 200);
           done();
         });
@@ -166,7 +154,7 @@ describe('CallByMeaning Server', function tests() {
 
       it('GET /<everythingelse> returns status code 404', function test(done) {
         this.timeout(TIMEOUT_TIME);
-        request.get(base_url + 'gbm/search/alsdlasd', function (error, response) {
+        request.get(baseUrl + 'gbm/search/alsdlasd', function(error, response) {
           assert(response.statusCode === 404);
           done();
         });
@@ -174,7 +162,7 @@ describe('CallByMeaning Server', function tests() {
 
       it('POST / returns a function if it exists', function test(done) {
         this.timeout(TIMEOUT_TIME);
-        request.post({uri: base_url + 'gbm/search', form: {'outputNodes': ['time']}}, function (error, response, body) {
+        request.post({uri: baseUrl + 'gbm/search', form: {'outputNodes': ['time']}}, function(error, response, body) {
           assert.ok(JSON.parse(body)[0].function === './js/now.js');
           done();
         });
@@ -182,21 +170,18 @@ describe('CallByMeaning Server', function tests() {
 
       it('POST / returns returns status code 418 if it can\'t find a function', function test(done) {
         this.timeout(TIMEOUT_TIME);
-        request.post({uri: base_url + 'gbm/search', form: {'outputNodes': ['days']}}, function (error, response) {
+        request.post({uri: baseUrl + 'gbm/search', form: {'outputNodes': ['days']}}, function(error, response) {
           assert(response.statusCode === 418);
           done();
         });
       });
-
     });
-
   });
 
   describe('/cbm', function test() {
-
     it('GET / returns status code 200', function test(done) {
       this.timeout(TIMEOUT_TIME);
-      request.get(base_url + 'cbm/', function (error, response) {
+      request.get(baseUrl + 'cbm/', function(error, response) {
         assert.ok(response.statusCode === 200);
         done();
       });
@@ -204,17 +189,16 @@ describe('CallByMeaning Server', function tests() {
 
     it('GET /<everythingelse> returns status code 404', function test(done) {
       this.timeout(TIMEOUT_TIME);
-      request.get(base_url + 'cbm/alsdlasd', function (error, response) {
+      request.get(baseUrl + 'cbm/alsdlasd', function(error, response) {
         assert(response.statusCode === 404);
         done();
       });
     });
 
     describe('/call', function test() {
-
       it('GET / returns status code 200', function test(done) {
         this.timeout(TIMEOUT_TIME);
-        request.get(base_url + 'cbm/call', function (error, response) {
+        request.get(baseUrl + 'cbm/call', function(error, response) {
           assert.ok(response.statusCode === 200);
           done();
         });
@@ -222,7 +206,7 @@ describe('CallByMeaning Server', function tests() {
 
       it('GET /<everythingelse> returns status code 404', function test(done) {
         this.timeout(TIMEOUT_TIME);
-        request.get(base_url + 'cbm/call/alsdlasd', function (error, response) {
+        request.get(baseUrl + 'cbm/call/alsdlasd', function(error, response) {
           assert(response.statusCode === 404);
           done();
         });
@@ -230,7 +214,7 @@ describe('CallByMeaning Server', function tests() {
 
       it('POST / can retrieve a function with given arguments if it is in DB (with same units)', function test(done) {
         this.timeout(TIMEOUT_TIME);
-        request.post({uri: base_url + 'cbm/call', form: {'outputNodes': ['time'], 'outputUnits': ['milliseconds']}}, function (error, response, body) {
+        request.post({uri: baseUrl + 'cbm/call', form: {'outputNodes': ['time'], 'outputUnits': ['milliseconds']}}, function(error, response, body) {
           assert.ok(JSON.parse(body) == eval(JSON.parse(body)));
           done();
         });
@@ -238,7 +222,7 @@ describe('CallByMeaning Server', function tests() {
 
       it('POST / can retrieve a function with given arguments if it is in DB (with different units)', function test(done) {
         this.timeout(TIMEOUT_TIME);
-        request.post({uri: base_url + 'cbm/call', form: {'outputNodes': ['time'], 'outputUnits': ['hours']}}, function (error, response, body) {
+        request.post({uri: baseUrl + 'cbm/call', form: {'outputNodes': ['time'], 'outputUnits': ['hours']}}, function(error, response, body) {
           assert.ok(JSON.parse(body) == eval(JSON.parse(body)));
           done();
         });
@@ -246,7 +230,7 @@ describe('CallByMeaning Server', function tests() {
 
       it('POST / can retrieve a function\'s code if returncode = true', function test(done) {
         this.timeout(TIMEOUT_TIME);
-        request.post({uri: base_url + 'cbm/call', headers: {returncode: true}, form: {'outputNodes': ['time'], 'outputUnits': ['hours']}}, function (error, response, body) {
+        request.post({uri: baseUrl + 'cbm/call', headers: {returncode: true}, form: {'outputNodes': ['time'], 'outputUnits': ['hours']}}, function(error, response, body) {
           assert.ok(JSON.parse(body).function === './js/now.js');
           done();
         });
@@ -254,15 +238,12 @@ describe('CallByMeaning Server', function tests() {
 
       it('POST / returns status 418 if it can\'t find a function in the DB', function test(done) {
         this.timeout(TIMEOUT_TIME);
-        request.post({uri: base_url + 'cbm/call', headers: {returncode: true}, form: {'outputNodes': ['bla'], 'outputUnits': ['seconds']}}, function (error, response) {
+        request.post({uri: baseUrl + 'cbm/call', headers: {returncode: true}, form: {'outputNodes': ['bla'], 'outputUnits': ['seconds']}}, function(error, response) {
           assert(response.statusCode === 418);
           server.close();
           done();
         });
       });
-
     });
-
   });
-
 });

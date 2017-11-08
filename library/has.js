@@ -12,7 +12,7 @@ var baseHas = require('./internal/_baseHas'),
  * @category Object
  * @param {object} object A js object.
  * @param {string} property A property of a js object.
- * @author has 
+ * @author has
  * @returns {boolean} True if a query has a property, false otherwise.
  * @example
  *

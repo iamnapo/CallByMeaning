@@ -19,7 +19,7 @@ var FUNC_ERROR_TEXT = 'Expected a function';
  * @author function
  * @returns {restricted_function} A restricted function.
  * @example
- * 
+ *
  * jQuery(element).on('click', _.before(5, addContactToList));
  * // => Allows adding up to 4 contacts to the list.
  */

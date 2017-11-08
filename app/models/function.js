@@ -1,29 +1,29 @@
 'use strict';
 
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var functionSchema = new mongoose.Schema({
+let functionSchema = new mongoose.Schema({
   name: {
     type: String,
-    unique: true
+    unique: true,
   },
   desc: String,
   codeFile: {
     type: String,
-    default: './js/default.js'
+    default: './js/default.js',
   },
   args: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Node'
+    ref: 'Node',
   }],
   returns: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Node'
+    ref: 'Node',
   }],
   argsNames: [],
   argsUnits: [],
   returnsNames: [],
-  returnsUnits: []
+  returnsUnits: [],
 });
 
 module.exports = mongoose.model('Function', functionSchema);
