@@ -5,7 +5,8 @@
   "main": "app/index.js",
   "scripts": {
     "start": "node app/index.js",
-    "test": "mocha"
+    "test": "mocha",
+    "initDB": "node app/dev/initDB.js"
   },
   "repository": {
     "type": "git",
@@ -26,6 +27,7 @@
     "dotenv": "^4.0.0",
     "express": "^4.16.2",
     "mathjs": "^3.16.5",
+    "mongodb": "^2.2.33",
     "mongoose": "^4.12.3",
     "morgan": "^1.9.0",
     "request": "^2.83.0",

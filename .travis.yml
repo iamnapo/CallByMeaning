@@ -15,7 +15,7 @@ deploy:
   skip_cleanup: true
 language: node_js
 node_js:
-- node
+- 8
 notifications:
   email: false
 sudo: false

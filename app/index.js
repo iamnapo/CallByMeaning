@@ -11,7 +11,7 @@ const fs = require('fs');
 const path = require('path');
 const port = process.env.PORT || 3000;
 
-mongoose.connect(process.env.ON_HEROKU == 1 ? 'mongodb://admin:' + process.env.MLAB_PASS + '@ds149724.mlab.com:49724/callbymeaning' : 'mongodb://localhost:27017/'.concat(process.env.DB || 'callbymeaning'), {
+mongoose.connect(process.env.ON_HEROKU == 1 ? 'mongodb://admin:'.concat(process.env.MLAB_PASS, '@ds149724.mlab.com:49724/callbymeaning') : 'mongodb://localhost:27017/'.concat(process.env.DB || 'callbymeaning'), {
   useMongoClient: true,
 });
 mongoose.Promise = global.Promise;
@@ -48,7 +48,6 @@ app.all('/:anything', (req, res) => {
 
 let server = app.listen(port, () => {
   if (process.env.ON_HEROKU == 0) {
-    console.log('mongodb://localhost:27017/'.concat(process.env.DB || 'callbymeaning'));
     console.log('Server ' + chalk.green('started') + ' at http://localhost:%s. Have fun. 😀', port);
   } else {
     console.log('Server ' + chalk.green('started') + '. Have fun. 😀');
