@@ -139,8 +139,8 @@ function fixNodeInFuncReferences() {
       if (err) console.log(err);
       for (let func of funcs) {
         for (let node of nodes) {
-          if (func.argsNames.indexOf(node.name) > -1) func.args.push(node._id);
-          if (func.returnsNames.indexOf(node.name) > -1) func.returns.push(node._id);
+          if (func.argsNames.length > func.args.length && func.argsNames.indexOf(node.name) > -1) func.args.push(node._id);
+          if (func.returnsNames.length > func.returns.length && func.returnsNames.indexOf(node.name) > -1) func.returns.push(node._id);
         }
         func.save();
       }
@@ -168,7 +168,29 @@ function fixFuncInNodeReferences() {
             }
           }
         }
-        node.units = [...new Set(node.units)];
+        node.func_arg = node.func_arg.filter(function(arg) {
+          let key = arg.name + '|' + arg.unitType;
+          if (!this[key]) {
+            this[key] = true;
+            return true;
+          }
+        }, Object.create(null));
+        node.func_res = node.func_res.filter(function(arg) {
+          let key = arg.name + '|' + arg.unitType;
+          if (!this[key]) {
+            this[key] = true;
+            return true;
+          }
+        }, Object.create(null));
+        node.units = node.units.filter(function(arg) {
+          let key = arg;
+          if (!this[key] && !(arg == null)) {
+            this[key] = true;
+            return true;
+          }
+        }, Object.create(null));
+        node.markModified('func_arg');
+        node.markModified('func_res');
         node.markModified('units');
         node.save();
       }
@@ -259,6 +281,13 @@ function fixRelations() {
           if (connection.end.name.indexOf(node.name) > -1) connection.end.id = (node._id);
         }
       }
+      relation.connects = relation.connects.filter(function(conn) {
+        let key = conn.start + '|' + conn.end + '|' + conn.mathRelation;
+        if (!this[key]) {
+          this[key] = true;
+          return true;
+        }
+      }, Object.create(null));
       relation.markModified('connects');
       relation.save();
     });
