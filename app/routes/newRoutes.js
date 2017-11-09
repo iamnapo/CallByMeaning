@@ -23,7 +23,9 @@ router.post('/node', (req, res) => {
     if (node) {
       node.units = node.units.concat(units);
       node.markModified('units');
-      node.save();
+      node.save((err, node) => {
+        if (err) console.error(err);
+      });
       return res.status(200).send('Node added.');
     } else {
       Node.create({name: name, desc: desc, units: units}, (err, node) => {
@@ -64,7 +66,9 @@ router.post('/function', (req, res) => {
       func.markModified('returnsNames');
       func.markModified('returnsUnits');
       func.markModified('codeFile');
-      func.save();
+      func.save((err, node) => {
+        if (err) console.error(err);
+      });
       res.status(200).send('Function added.');
     } else {
       Function.create({
@@ -100,7 +104,9 @@ router.post('/relation', (req, res) => {
     if (relation) {
       relation.connects = relation.connects.concat(connects);
       relation.markModified('connects');
-      relation.save();
+      relation.save((err, node) => {
+        if (err) console.error(err);
+      });
       return res.status(200).send('Relation added.');
     } else {
       Relation.create(
@@ -125,9 +131,11 @@ router.all('/relation/:anything', (req, res) => {
 
 router.post('/fix', (req, res) => {
   if (req.body.command === 'fixit') {
-    fix.fixNodeInFuncReferences();
-    fix.fixFuncInNodeReferences();
+    fix.fixReferences();
     fix.fixRelations();
+  }
+  if (req.body.command === 'fixtests') {
+    fix.fixTests();
   }
   return res.send('cool bro');
 });

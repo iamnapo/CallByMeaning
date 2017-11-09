@@ -142,8 +142,11 @@ function fixNodeInFuncReferences() {
           if (func.argsNames.length > func.args.length && func.argsNames.indexOf(node.name) > -1) func.args.push(node._id);
           if (func.returnsNames.length > func.returns.length && func.returnsNames.indexOf(node.name) > -1) func.returns.push(node._id);
         }
-        func.save();
+        func.save((err, node) => {
+          if (err) console.error(err);
+        });
       }
+      fixFuncInNodeReferences();
     });
   });
 }
@@ -192,7 +195,9 @@ function fixFuncInNodeReferences() {
         node.markModified('func_arg');
         node.markModified('func_res');
         node.markModified('units');
-        node.save();
+        node.save((err, node) => {
+          if (err) console.error(err);
+        });
       }
     });
   });
@@ -247,7 +252,9 @@ function createRelations() {
         };
         relation.connects.push({start: start, end: end, mathRelation: 'start / 60'});
         relation.connects.push({start: end, end: start, mathRelation: 'start * 60'});
-        relation.save();
+        relation.save((err, node) => {
+          if (err) console.error(err);
+        });
       });
     });
     Node.findOne({name: 'milliseconds'}, function(err, nodeB) {
@@ -264,7 +271,9 @@ function createRelations() {
         };
         relation.connects.push({start: start, end: end, mathRelation: 'start / 3600000'});
         relation.connects.push({start: end, end: start, mathRelation: 'start * 3600000'});
-        relation.save();
+        relation.save((err, node) => {
+          if (err) console.error(err);
+        });
       });
     });
   });
@@ -289,8 +298,25 @@ function fixRelations() {
         }
       }, Object.create(null));
       relation.markModified('connects');
-      relation.save();
+      relation.save((err, node) => {
+        if (err) console.error(err);
+      });
     });
+  });
+}
+
+function fixTests() {
+  Node.findOneAndRemove({name: 'Napo'}, (err, node) => {
+    if (err) console.error(err);
+  });
+  Node.findOneAndRemove({name: 'Mary'}, (err, node) => {
+    if (err) console.error(err);
+  });
+  Function.findOneAndRemove({name: 'testFunc'}, (err, func) => {
+    if (err) console.error(err);
+  });
+  Relation.findOneAndRemove({name: 'testRel'}, (err, rel) => {
+    if (err) console.error(err);
   });
 }
 
@@ -303,7 +329,6 @@ function fillWithFuncs() {
     () => addFuncsToDB(funcProperties),
     () => addNodesToDB(params),
     () => fixNodeInFuncReferences(),
-    () => fixFuncInNodeReferences(),
     () => createRelations(),
     () => fixRelations(),
     () => console.log('DONE!'),
@@ -314,7 +339,7 @@ function fillWithFuncs() {
 module.exports =
 {
   'fillWithFuncs': fillWithFuncs,
-  'fixNodeInFuncReferences': fixNodeInFuncReferences,
-  'fixFuncInNodeReferences': fixFuncInNodeReferences,
+  'fixReferences': fixNodeInFuncReferences,
   'fixRelations': fixRelations,
+  'fixTests': fixTests,
 };
