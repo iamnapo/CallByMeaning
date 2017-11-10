@@ -1,5 +1,5 @@
 var arraySample = require('./_arraySample'),
-    values = require('./values');
+    values = require('../values');
 
 'use strict';
 

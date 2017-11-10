@@ -1,5 +1,5 @@
 var baseForRight = require('./_baseForRight'),
-    keys = require('./keys');
+    keys = require('../keys');
 
 'use strict';
 

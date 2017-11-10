@@ -1,5 +1,5 @@
 var baseGetTag = require('./_baseGetTag'),
-    isObjectLike = require('./isObjectLike');
+    isObjectLike = require('../isObjectLike');
 
 'use strict';
 

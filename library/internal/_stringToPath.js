@@ -3,7 +3,7 @@ var memoizeCapped = require('./_memoizeCapped');
 'use strict';
 
 /** Used to match property names within property paths. */
-var reLeadingDot = /^\./,
+var reLeadingDot = /^\../,
     rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g;
 
 /** Used to match backslashes in property paths. */

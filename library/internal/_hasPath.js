@@ -1,8 +1,8 @@
 var castPath = require('./_castPath'),
-    isArguments = require('./isArguments'),
-    isArray = require('./isArray'),
+    isArguments = require('../isArguments'),
+    isArray = require('../isArray'),
     isIndex = require('./_isIndex'),
-    isLength = require('./isLength'),
+    isLength = require('../isLength'),
     toKey = require('./_toKey');
 
 'use strict';

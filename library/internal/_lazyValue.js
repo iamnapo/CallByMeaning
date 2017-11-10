@@ -1,6 +1,6 @@
 var baseWrapperValue = require('./_baseWrapperValue'),
     getView = require('./_getView'),
-    isArray = require('./isArray');
+    isArray = require('../isArray');
 
 'use strict';
 

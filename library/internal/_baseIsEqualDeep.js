@@ -3,9 +3,9 @@ var Stack = require('./_Stack'),
     equalByTag = require('./_equalByTag'),
     equalObjects = require('./_equalObjects'),
     getTag = require('./_getTag'),
-    isArray = require('./isArray'),
-    isBuffer = require('./isBuffer'),
-    isTypedArray = require('./isTypedArray');
+    isArray = require('../isArray'),
+    isBuffer = require('../isBuffer'),
+    isTypedArray = require('../isTypedArray');
 
 'use strict';
 

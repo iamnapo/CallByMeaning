@@ -3,15 +3,15 @@ var assignMergeValue = require('./_assignMergeValue'),
     cloneTypedArray = require('./_cloneTypedArray'),
     copyArray = require('./_copyArray'),
     initCloneObject = require('./_initCloneObject'),
-    isArguments = require('./isArguments'),
-    isArray = require('./isArray'),
-    isArrayLikeObject = require('./isArrayLikeObject'),
-    isBuffer = require('./isBuffer'),
-    isFunction = require('./isFunction'),
-    isObject = require('./isObject'),
-    isPlainObject = require('./isPlainObject'),
-    isTypedArray = require('./isTypedArray'),
-    toPlainObject = require('./toPlainObject');
+    isArguments = require('../isArguments'),
+    isArray = require('../isArray'),
+    isArrayLikeObject = require('../isArrayLikeObject'),
+    isBuffer = require('../isBuffer'),
+    isFunction = require('../isFunction'),
+    isObject = require('../isObject'),
+    isPlainObject = require('../isPlainObject'),
+    isTypedArray = require('../isTypedArray'),
+    toPlainObject = require('../toPlainObject');
 
 'use strict';
 

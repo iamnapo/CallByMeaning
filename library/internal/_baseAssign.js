@@ -1,5 +1,5 @@
 var copyObject = require('./_copyObject'),
-    keys = require('./keys');
+    keys = require('../keys');
 
 'use strict';
 

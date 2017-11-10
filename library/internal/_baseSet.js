@@ -1,7 +1,7 @@
 var assignValue = require('./_assignValue'),
     castPath = require('./_castPath'),
     isIndex = require('./_isIndex'),
-    isObject = require('./isObject'),
+    isObject = require('../isObject'),
     toKey = require('./_toKey');
 
 'use strict';

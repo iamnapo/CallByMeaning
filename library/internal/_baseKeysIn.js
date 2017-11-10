@@ -1,4 +1,4 @@
-var isObject = require('./isObject'),
+var isObject = require('../isObject'),
     isPrototype = require('./_isPrototype'),
     nativeKeysIn = require('./_nativeKeysIn');
 

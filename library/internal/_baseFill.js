@@ -1,5 +1,5 @@
-var toInteger = require('./toInteger'),
-    toLength = require('./toLength');
+var toInteger = require('../toInteger'),
+    toLength = require('../toLength');
 
 'use strict';
 

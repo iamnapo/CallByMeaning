@@ -1,6 +1,6 @@
 var arrayReduce = require('./_arrayReduce'),
-    deburr = require('./deburr'),
-    words = require('./words');
+    deburr = require('../deburr'),
+    words = require('../words');
 
 'use strict';
 

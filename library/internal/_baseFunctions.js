@@ -1,5 +1,5 @@
 var arrayFilter = require('./_arrayFilter'),
-    isFunction = require('./isFunction');
+    isFunction = require('../isFunction');
 
 'use strict';
 

@@ -1,4 +1,4 @@
-var isArrayLike = require('./isArrayLike');
+var isArrayLike = require('../isArrayLike');
 
 'use strict';
 

@@ -1,5 +1,5 @@
 var castPath = require('./_castPath'),
-    last = require('./last'),
+    last = require('../last'),
     parent = require('./_parent'),
     toKey = require('./_toKey');
 

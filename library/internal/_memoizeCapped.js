@@ -1,4 +1,4 @@
-var memoize = require('./memoize');
+var memoize = require('../memoize');
 
 'use strict';
 

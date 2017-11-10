@@ -2,8 +2,8 @@ var Stack = require('./_Stack'),
     assignMergeValue = require('./_assignMergeValue'),
     baseFor = require('./_baseFor'),
     baseMergeDeep = require('./_baseMergeDeep'),
-    isObject = require('./isObject'),
-    keysIn = require('./keysIn');
+    isObject = require('../isObject'),
+    keysIn = require('../keysIn');
 
 'use strict';
 

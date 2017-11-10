@@ -2,7 +2,7 @@ var LodashWrapper = require('./_LodashWrapper'),
     flatRest = require('./_flatRest'),
     getData = require('./_getData'),
     getFuncName = require('./_getFuncName'),
-    isArray = require('./isArray'),
+    isArray = require('../isArray'),
     isLaziable = require('./_isLaziable');
 
 'use strict';

@@ -1,5 +1,5 @@
 var metaMap = require('./_metaMap'),
-    noop = require('./noop');
+    noop = require('../noop');
 
 'use strict';
 

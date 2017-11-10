@@ -1,6 +1,6 @@
 var baseGetAllKeys = require('./_baseGetAllKeys'),
     getSymbolsIn = require('./_getSymbolsIn'),
-    keysIn = require('./keysIn');
+    keysIn = require('../keysIn');
 
 'use strict';
 

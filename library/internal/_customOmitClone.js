@@ -1,4 +1,4 @@
-var isPlainObject = require('./isPlainObject');
+var isPlainObject = require('../isPlainObject');
 
 'use strict';
 

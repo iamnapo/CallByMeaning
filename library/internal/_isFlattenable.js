@@ -1,6 +1,6 @@
 var Symbol = require('./_Symbol'),
-    isArguments = require('./isArguments'),
-    isArray = require('./isArray');
+    isArguments = require('../isArguments'),
+    isArray = require('../isArray');
 
 'use strict';
 

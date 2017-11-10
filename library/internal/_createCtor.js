@@ -1,5 +1,5 @@
 var baseCreate = require('./_baseCreate'),
-    isObject = require('./isObject');
+    isObject = require('../isObject');
 
 'use strict';
 

@@ -1,5 +1,5 @@
 var basePickBy = require('./_basePickBy'),
-    hasIn = require('./hasIn');
+    hasIn = require('../hasIn');
 
 'use strict';
 

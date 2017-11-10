@@ -1,5 +1,5 @@
 var baseAssignValue = require('./_baseAssignValue'),
-    eq = require('./eq');
+    eq = require('../eq');
 
 'use strict';
 

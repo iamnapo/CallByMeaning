@@ -4,7 +4,7 @@ var arrayMap = require('./_arrayMap'),
     baseSortBy = require('./_baseSortBy'),
     baseUnary = require('./_baseUnary'),
     compareMultiple = require('./_compareMultiple'),
-    identity = require('./identity');
+    identity = require('../identity');
 
 'use strict';
 

@@ -1,6 +1,6 @@
 var baseClamp = require('./_baseClamp'),
     shuffleSelf = require('./_shuffleSelf'),
-    values = require('./values');
+    values = require('../values');
 
 'use strict';
 

@@ -13,10 +13,10 @@ var Stack = require('./_Stack'),
     initCloneArray = require('./_initCloneArray'),
     initCloneByTag = require('./_initCloneByTag'),
     initCloneObject = require('./_initCloneObject'),
-    isArray = require('./isArray'),
-    isBuffer = require('./isBuffer'),
-    isObject = require('./isObject'),
-    keys = require('./keys');
+    isArray = require('../isArray'),
+    isBuffer = require('../isBuffer'),
+    isObject = require('../isObject'),
+    keys = require('../keys');
 
 'use strict';
 

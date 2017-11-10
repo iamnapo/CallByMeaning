@@ -1,7 +1,7 @@
-var isArray = require('./isArray'),
+var isArray = require('../isArray'),
     isKey = require('./_isKey'),
     stringToPath = require('./_stringToPath'),
-    toString = require('./toString');
+    toString = require('../toString');
 
 'use strict';
 

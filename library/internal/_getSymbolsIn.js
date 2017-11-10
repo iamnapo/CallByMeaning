@@ -1,7 +1,7 @@
 var arrayPush = require('./_arrayPush'),
     getPrototype = require('./_getPrototype'),
     getSymbols = require('./_getSymbols'),
-    stubArray = require('./stubArray');
+    stubArray = require('../stubArray');
 
 'use strict';
 

@@ -1,7 +1,7 @@
-var eq = require('./eq'),
-    isArrayLike = require('./isArrayLike'),
+var eq = require('../eq'),
+    isArrayLike = require('../isArrayLike'),
     isIndex = require('./_isIndex'),
-    isObject = require('./isObject');
+    isObject = require('../isObject');
 
 'use strict';
 

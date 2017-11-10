@@ -1,4 +1,4 @@
-var isObject = require('./isObject');
+var isObject = require('../isObject');
 
 'use strict';
 

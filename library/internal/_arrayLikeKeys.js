@@ -1,9 +1,9 @@
 var baseTimes = require('./_baseTimes'),
-    isArguments = require('./isArguments'),
-    isArray = require('./isArray'),
-    isBuffer = require('./isBuffer'),
+    isArguments = require('../isArguments'),
+    isArray = require('../isArray'),
+    isBuffer = require('../isBuffer'),
     isIndex = require('./_isIndex'),
-    isTypedArray = require('./isTypedArray');
+    isTypedArray = require('../isTypedArray');
 
 'use strict';
 

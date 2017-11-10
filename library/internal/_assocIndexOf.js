@@ -1,4 +1,4 @@
-var eq = require('./eq');
+var eq = require('../eq');
 
 'use strict';
 

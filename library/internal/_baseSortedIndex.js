@@ -1,6 +1,6 @@
 var baseSortedIndexBy = require('./_baseSortedIndexBy'),
-    identity = require('./identity'),
-    isSymbol = require('./isSymbol');
+    identity = require('../identity'),
+    isSymbol = require('../isSymbol');
 
 'use strict';
 

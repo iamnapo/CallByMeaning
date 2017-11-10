@@ -1,6 +1,6 @@
 var Symbol = require('./_Symbol'),
     Uint8Array = require('./_Uint8Array'),
-    eq = require('./eq'),
+    eq = require('../eq'),
     equalArrays = require('./_equalArrays'),
     mapToArray = require('./_mapToArray'),
     setToArray = require('./_setToArray');

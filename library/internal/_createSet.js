@@ -1,5 +1,5 @@
 var Set = require('./_Set'),
-    noop = require('./noop'),
+    noop = require('../noop'),
     setToArray = require('./_setToArray');
 
 'use strict';

@@ -1,6 +1,6 @@
-var toInteger = require('./toInteger'),
-    toNumber = require('./toNumber'),
-    toString = require('./toString');
+var toInteger = require('../toInteger'),
+    toNumber = require('../toNumber'),
+    toString = require('../toString');
 
 'use strict';
 

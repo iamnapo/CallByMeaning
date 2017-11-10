@@ -1,4 +1,4 @@
-var toNumber = require('./toNumber');
+var toNumber = require('../toNumber');
 
 'use strict';
 

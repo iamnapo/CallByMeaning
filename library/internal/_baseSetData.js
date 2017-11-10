@@ -1,4 +1,4 @@
-var identity = require('./identity'),
+var identity = require('../identity'),
     metaMap = require('./_metaMap');
 
 'use strict';

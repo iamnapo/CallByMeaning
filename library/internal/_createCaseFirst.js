@@ -1,7 +1,7 @@
 var castSlice = require('./_castSlice'),
     hasUnicode = require('./_hasUnicode'),
     stringToArray = require('./_stringToArray'),
-    toString = require('./toString');
+    toString = require('../toString');
 
 'use strict';
 

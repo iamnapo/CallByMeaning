@@ -1,6 +1,6 @@
 var baseIteratee = require('./_baseIteratee'),
-    isArrayLike = require('./isArrayLike'),
-    keys = require('./keys');
+    isArrayLike = require('../isArrayLike'),
+    keys = require('../keys');
 
 'use strict';
 

@@ -1,5 +1,5 @@
 var arrayPush = require('./_arrayPush'),
-    isArray = require('./isArray');
+    isArray = require('../isArray');
 
 'use strict';
 

@@ -1,4 +1,4 @@
-var identity = require('./identity');
+var identity = require('../identity');
 
 'use strict';
 

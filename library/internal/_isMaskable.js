@@ -1,6 +1,6 @@
 var coreJsData = require('./_coreJsData'),
-    isFunction = require('./isFunction'),
-    stubFalse = require('./stubFalse');
+    isFunction = require('../isFunction'),
+    stubFalse = require('../stubFalse');
 
 'use strict';
 

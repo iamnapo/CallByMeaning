@@ -1,4 +1,4 @@
-var get = require('./get');
+var get = require('../get');
 
 'use strict';
 

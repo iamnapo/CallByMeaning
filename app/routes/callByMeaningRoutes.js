@@ -4,6 +4,7 @@ const express = require('express');
 const router = new express.Router();
 const request = require('request');
 const math = require('mathjs');
+const JSON = require('../dev/jsonfn');
 
 const Function = require('../models/function');
 const Relation = require('../models/relation');
@@ -23,11 +24,17 @@ router.post('/call', (req, res) => {
   req.body.outputNodes = req.body.outputNodes || [];
   req.body.outputUnits = req.body.outputUnits || [];
   let returnCode = eval(req.headers.returncode) || false;
-  // Get what the inputs are, their values and in what units
   let inputNodes = req.body.inputNodes instanceof Object ? req.body.inputNodes : req.body.inputNodes.split(' ').join('').split(',');
   let inputUnits = req.body.inputUnits instanceof Object ? req.body.inputUnits : req.body.inputUnits.split(' ').join('').split(',');
   let inputVars = req.body.inputVars instanceof Object ? req.body.inputVars : req.body.inputVars.split(' ').join('').split(',');
-  // Get what results the caller wants and in what units
+  inputVars = inputVars.map((inputVar) => {
+    try {
+      let t = JSON.parse(inputVar);
+      return t;
+    } catch (error) {
+      return inputVar;
+    }
+  });
   let outputNodes = req.body.outputNodes instanceof Object ? req.body.outputNodes : req.body.outputNodes.split(' ').join('').split(',');
   let outputUnits = req.body.outputUnits instanceof Object ? req.body.outputUnits : req.body.outputUnits.split(' ').join('').split(',');
   if (outputNodes == null || outputNodes.length !== outputUnits.length) {
@@ -37,79 +44,90 @@ router.post('/call', (req, res) => {
     return res.status(400).send('Input parameters must have the same length.');
   }
   request.post({uri: req.protocol + '://' + req.get('host') + req.originalUrl[0] + 'gbm/search/', form: {inputNodes: inputNodes, outputNodes: outputNodes}}, function(err, response, body) {
-    if (err) console.log(err);
+    if (err) console.error(err);
     if (response.statusCode !== 200) return res.status(response.statusCode).send(body);
-    // If I'm here body.codefile, body.desc contains the functions with the asked inputs and outputs (but maybe in different units)
-    Function.findOne({codeFile: JSON.parse(body)[0].function}, (err, result) => {
-      if (err) console.log(err);
-      Function.find({argsNames: result.argsNames, returnsNames: result.returnsNames}).populate('results').exec((err, funcs) => {
-        if (err) console.log(err);
-        let funcsChecked = 0;
-        for (let func of funcs) {
-          funcsChecked++;
-          if (res.headersSent) break;
-          let correctInputs = [];
-          if (inputUnits.length !== 0) {
-            for (let i = 0; i < inputUnits.length; i++) {
-              if (res.headersSent) break;
-              let foundRelationIn = false;
-              if (func.argsUnits[i] === inputUnits[i]) {
-                correctInputs[i] = inputVars[i];
-                continue;
-              } else {
-                // find "unitConversion" relation
-                Relation.findOne({name: 'unitConversion'}, (err, relation) => {
-                  if (err) console.log(err);
-                  for (let connection of relation.connects) {
-                    if (res.headersSent) break;
-                    // if I find the correct connection
-                    if (connection.start.name === inputUnits[i] && connection.end.name === func.argsUnits[i]) {
-                      foundRelationIn = true;
-                      // compute correct input value
-                      let mathRelation = connection.mathRelation;
-                      mathRelation = mathRelation.replace('start', JSON.stringify(inputVars[i]));
-                      correctInputs[i] = math.eval(mathRelation);
-                      // check next input
-                      break;
+    Function.find({codeFile: {$in: JSON.parse(body).map((item) => item.function)}, argsUnits: inputUnits, returnsUnits: outputUnits}).populate('results').exec((err, funcs) => {
+      if (err) console.error(err);
+      if (funcs.length !== 0) {
+        let func = funcs[0]; // Only possibility
+        if (returnCode) {
+          let codeRes = {
+            function: func.codeFile,
+            description: func.desc,
+          };
+          return res.json(codeRes);
+        }
+        let funcToRun = require('../../library/' + func.codeFile.substring(5));
+        let funcResult = funcToRun(...inputVars);
+        return res.send(JSON.stringify(funcResult));
+      } else {
+        Function.find({codeFile: {$in: JSON.parse(body).map((item) => item.function)}}).populate('results').exec((err, funcs) => {
+          if (err) console.log(err);
+          Relation.findOne({name: 'unitConversion'}, (err, relation) => {
+            if (err) console.error(err);
+            let funcsChecked = 0;
+            for (let func of funcs) {
+              funcsChecked++;
+              let correctInputs = [];
+              if (inputUnits.length !== 0) {
+                for (let i = 0; i < inputUnits.length; i++) {
+                  if (func.argsUnits[i] === inputUnits[i]) {
+                    correctInputs[i] = inputVars[i];
+                  } else {
+                    let foundInputRelation = false;
+                    for (let connection of relation.connects) {
+                      if (connection.start.name === inputUnits[i] && connection.end.name === func.argsUnits[i]) {
+                        foundInputRelation = true;
+                        let mathRelation = connection.mathRelation;
+                        mathRelation = mathRelation.replace('start', JSON.stringify(inputVars[i]));
+                        correctInputs[i] = math.eval(mathRelation);
+                        break;
+                      }
+                    }
+                    if (!foundInputRelation) {
+                      return res.status(418).send('There is a function whith these concepts, but given units can\'t be interpreted.');
                     }
                   }
-                });
-                if (!foundRelationIn) {
+                }
+              }
+              let funcToRun = require('../../library/' + func.codeFile.substring(5));
+              let funcResult = funcToRun(...correctInputs);
+              if (func.returnsUnits[0] === outputUnits[0]) {
+                if (returnCode) {
+                  let codeRes = {
+                    function: func.codeFile,
+                    desc: func.desc,
+                  };
+                  return res.json(codeRes);
+                }
+                return res.send(JSON.stringify(funcResult));
+              } else {
+                let foundOutputRelation = false;
+                for (let connection of relation.connects) {
+                  if (connection.start.name === outputUnits[0] && connection.end.name === func.returnsUnits[0]) {
+                    foundOutputRelation = true;
+                    let mathRelation = connection.mathRelation;
+                    mathRelation = mathRelation.replace('start', JSON.stringify(funcResult));
+                    mathRelation = JSON.stringify(math.eval(mathRelation));
+                    if (returnCode) {
+                      let codeRes = {
+                        function: func.codeFile,
+                        description: func.desc,
+                      };
+                      return res.json(codeRes);
+                    }
+                    return res.send(mathRelation);
+                  }
+                }
+                if (!foundOutputRelation) {
                   return res.status(418).send('There is a function whith these concepts, but given units can\'t be interpreted.');
                 }
               }
+              if (funcsChecked === funcs.length) return res.status(418).send('Function not found in DB.');
             }
-          }
-          // calculate result or return relevant code
-          if (returnCode) {
-            let codeRes = {
-              function: func.codeFile,
-              desc: func.desc,
-            };
-            return res.json(codeRes);
-          }
-          let funcToRun = require('../../library/' + func.codeFile.substring(5));
-          let funcResult = funcToRun(...correctInputs);
-          if (func.returnsUnits[0] === outputUnits[0]) {
-            return res.send(JSON.stringify(funcResult));
-          }
-          // find "unitConversion" relation
-          Relation.findOne({name: 'unitConversion'}, (err, relation) => {
-            for (let connection of relation.connects) {
-              if (res.headersSent) break;
-              // if I find the correct connection
-              if (connection.start.name === outputUnits[0] && connection.end.name === func.returnsUnits[0]) {
-                // compute correct output value
-                let mathRelation = connection.mathRelation;
-                mathRelation = mathRelation.replace('start', JSON.stringify(funcResult));
-                mathRelation = JSON.stringify(math.eval(mathRelation));
-                return res.send(mathRelation);
-              }
-            }
-            if (funcsChecked === funcs.length && !res.headersSent) return res.status(418).send('Function not found in DB.');
           });
-        }
-      });
+        });
+      }
     });
   });
 });

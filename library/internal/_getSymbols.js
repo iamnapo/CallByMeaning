@@ -1,5 +1,5 @@
 var arrayFilter = require('./_arrayFilter'),
-    stubArray = require('./stubArray');
+    stubArray = require('../stubArray');
 
 'use strict';
 

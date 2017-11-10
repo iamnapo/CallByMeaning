@@ -1,6 +1,6 @@
-var constant = require('./constant'),
+var constant = require('../constant'),
     defineProperty = require('./_defineProperty'),
-    identity = require('./identity');
+    identity = require('../identity');
 
 'use strict';
 

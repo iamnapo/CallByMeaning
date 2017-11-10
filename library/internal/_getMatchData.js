@@ -1,5 +1,5 @@
 var isStrictComparable = require('./_isStrictComparable'),
-    keys = require('./keys');
+    keys = require('../keys');
 
 'use strict';
 

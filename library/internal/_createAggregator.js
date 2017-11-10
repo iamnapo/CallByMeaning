@@ -1,7 +1,7 @@
 var arrayAggregator = require('./_arrayAggregator'),
     baseAggregator = require('./_baseAggregator'),
     baseIteratee = require('./_baseIteratee'),
-    isArray = require('./isArray');
+    isArray = require('../isArray');
 
 'use strict';
 

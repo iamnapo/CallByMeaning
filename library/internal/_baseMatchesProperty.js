@@ -1,6 +1,6 @@
 var baseIsEqual = require('./_baseIsEqual'),
-    get = require('./get'),
-    hasIn = require('./hasIn'),
+    get = require('../get'),
+    hasIn = require('../hasIn'),
     isKey = require('./_isKey'),
     isStrictComparable = require('./_isStrictComparable'),
     matchesStrictComparable = require('./_matchesStrictComparable'),

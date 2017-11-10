@@ -1,5 +1,5 @@
-var isArray = require('./isArray'),
-    isSymbol = require('./isSymbol');
+var isArray = require('../isArray'),
+    isSymbol = require('../isSymbol');
 
 'use strict';
 

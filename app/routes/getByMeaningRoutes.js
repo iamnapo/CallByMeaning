@@ -3,6 +3,7 @@
 const express = require('express');
 const router = new express.Router();
 const request = require('request');
+const JSON = require('../dev/jsonfn');
 
 const Function = require('../models/function');
 
@@ -24,7 +25,7 @@ router.post('/search', (req, res) => {
     if (funcs.length !== 0) {
       let temp = [];
       for (let t = 0; t < funcs.length; t ++) {
-        temp.push({function: funcs[0].codeFile, desc: funcs[0].desc});
+        temp.push({function: funcs[t].codeFile, desc: funcs[t].desc});
       }
       return res.json(temp);
     }

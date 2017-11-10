@@ -1,5 +1,5 @@
 var shuffleSelf = require('./_shuffleSelf'),
-    values = require('./values');
+    values = require('../values');
 
 'use strict';
 

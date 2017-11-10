@@ -1,4 +1,4 @@
-var identity = require('./identity'),
+var identity = require('../identity'),
     overRest = require('./_overRest'),
     setToString = require('./_setToString');
 

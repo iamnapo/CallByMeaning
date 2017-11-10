@@ -7,7 +7,7 @@ var baseSetData = require('./_baseSetData'),
     mergeData = require('./_mergeData'),
     setData = require('./_setData'),
     setWrapToString = require('./_setWrapToString'),
-    toInteger = require('./toInteger');
+    toInteger = require('../toInteger');
 
 'use strict';
 

@@ -1,6 +1,6 @@
-var isFunction = require('./isFunction'),
+var isFunction = require('../isFunction'),
     isMasked = require('./_isMasked'),
-    isObject = require('./isObject'),
+    isObject = require('../isObject'),
     toSource = require('./_toSource');
 
 'use strict';

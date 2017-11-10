@@ -1,5 +1,5 @@
 var baseConformsTo = require('./_baseConformsTo'),
-    keys = require('./keys');
+    keys = require('../keys');
 
 'use strict';
 

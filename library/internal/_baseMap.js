@@ -1,5 +1,5 @@
 var baseEach = require('./_baseEach'),
-    isArrayLike = require('./isArrayLike');
+    isArrayLike = require('../isArrayLike');
 
 'use strict';
 

@@ -1,5 +1,5 @@
 var baseMerge = require('./_baseMerge'),
-    isObject = require('./isObject');
+    isObject = require('../isObject');
 
 'use strict';
 

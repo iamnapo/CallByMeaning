@@ -1,8 +1,8 @@
 var baseMatches = require('./_baseMatches'),
     baseMatchesProperty = require('./_baseMatchesProperty'),
-    identity = require('./identity'),
-    isArray = require('./isArray'),
-    property = require('./property');
+    identity = require('../identity'),
+    isArray = require('../isArray'),
+    property = require('../property');
 
 'use strict';
 

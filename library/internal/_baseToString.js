@@ -1,7 +1,7 @@
 var Symbol = require('./_Symbol'),
     arrayMap = require('./_arrayMap'),
-    isArray = require('./isArray'),
-    isSymbol = require('./isSymbol');
+    isArray = require('../isArray'),
+    isSymbol = require('../isSymbol');
 
 'use strict';
 

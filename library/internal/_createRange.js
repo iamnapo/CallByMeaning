@@ -1,6 +1,6 @@
 var baseRange = require('./_baseRange'),
     isIterateeCall = require('./_isIterateeCall'),
-    toFinite = require('./toFinite');
+    toFinite = require('../toFinite');
 
 'use strict';
 
