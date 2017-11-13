@@ -75,13 +75,20 @@ router.post('/call', (req, res) => {
                     correctInputs[i] = inputVars[i];
                   } else {
                     let foundInputRelation = false;
-                    for (let connection of relation.connects) {
-                      if (connection.start.name === inputUnits[i] && connection.end.name === func.argsUnits[i]) {
-                        foundInputRelation = true;
-                        let mathRelation = connection.mathRelation;
-                        mathRelation = mathRelation.replace('start', JSON.stringify(inputVars[i]));
-                        correctInputs[i] = math.eval(mathRelation);
-                        break;
+                    try {
+                      let inMath = math.unit(inputUnits[i]);
+                      let argMath = math.unit(func.argsUnits[i]);
+                      correctInputs[i] = inputVars[i] * math.to(argMath, inMath).toNumber();
+                      foundInputRelation = true;
+                    } catch (error) {
+                      for (let connection of relation.connects) {
+                        if (connection.start.name === inputUnits[i] && connection.end.name === func.argsUnits[i]) {
+                          foundInputRelation = true;
+                          let mathRelation = connection.mathRelation;
+                          mathRelation = mathRelation.replace('start', JSON.stringify(inputVars[i]));
+                          correctInputs[i] = math.eval(mathRelation);
+                          break;
+                        }
                       }
                     }
                     if (!foundInputRelation) {
@@ -103,20 +110,35 @@ router.post('/call', (req, res) => {
                 return res.send(JSON.stringify(funcResult));
               } else {
                 let foundOutputRelation = false;
-                for (let connection of relation.connects) {
-                  if (connection.start.name === outputUnits[0] && connection.end.name === func.returnsUnits[0]) {
-                    foundOutputRelation = true;
-                    let mathRelation = connection.mathRelation;
-                    mathRelation = mathRelation.replace('start', JSON.stringify(funcResult));
-                    mathRelation = JSON.stringify(math.eval(mathRelation));
-                    if (returnCode) {
-                      let codeRes = {
-                        function: func.codeFile,
-                        description: func.desc,
-                      };
-                      return res.json(codeRes);
+                try {
+                  let outMath = math.unit(outputUnits[0]);
+                  let returnMath = math.unit(func.returnsUnits[0]);
+                  let mathRelation = funcResult * math.to(returnMath, outMath).toNumber();
+                  foundOutputRelation = true;
+                  if (returnCode) {
+                    let codeRes = {
+                      function: func.codeFile,
+                      description: func.desc,
+                    };
+                    return res.json(codeRes);
+                  }
+                  return res.send(JSON.stringify(mathRelation));
+                } catch (error) {
+                  for (let connection of relation.connects) {
+                    if (connection.start.name === outputUnits[0] && connection.end.name === func.returnsUnits[0]) {
+                      foundOutputRelation = true;
+                      let mathRelation = connection.mathRelation;
+                      mathRelation = mathRelation.replace('start', JSON.stringify(funcResult));
+                      mathRelation = JSON.stringify(math.eval(mathRelation));
+                      if (returnCode) {
+                        let codeRes = {
+                          function: func.codeFile,
+                          description: func.desc,
+                        };
+                        return res.json(codeRes);
+                      }
+                      return res.send(mathRelation);
                     }
-                    return res.send(mathRelation);
                   }
                 }
                 if (!foundOutputRelation) {
