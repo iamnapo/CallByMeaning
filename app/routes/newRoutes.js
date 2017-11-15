@@ -37,10 +37,6 @@ router.post('/node', (req, res) => {
   });
 });
 
-router.all('/node/:anything', (req, res) => {
-  return res.status(404).send('Hmm... How did you end up here?');
-});
-
 router.post('/function', (req, res) => {
   let name = req.body.name;
   let desc = req.body.desc || '';
@@ -88,10 +84,6 @@ router.post('/function', (req, res) => {
   });
 });
 
-router.all('/function/:anything', (req, res) => {
-  return res.status(404).send('Hmm... How did you end up here?');
-});
-
 router.post('/relation', (req, res) => {
   let name = req.body.name;
   let desc = req.body.desc || '';
@@ -125,10 +117,6 @@ router.post('/relation', (req, res) => {
   });
 });
 
-router.all('/relation/:anything', (req, res) => {
-  return res.status(404).send('Hmm... How did you end up here?');
-});
-
 router.post('/fix', (req, res) => {
   if (req.body.command === 'fixit') {
     fix.fixReferences();
@@ -138,10 +126,6 @@ router.post('/fix', (req, res) => {
     fix.fixTests();
   }
   return res.send('cool bro');
-});
-
-router.all('/:anything', (req, res) => {
-  return res.status(404).send('Hmm... How did you end up here?');
 });
 
 module.exports = router;

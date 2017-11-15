@@ -62,8 +62,4 @@ router.get('/r/:rel', (req, res) => {
   });
 });
 
-router.all('/:anything', (req, res) => {
-  return res.status(404).send('Hmm... How did you end up here?');
-});
-
 module.exports = router;

@@ -42,7 +42,7 @@ app.use('/gbm', getByMeaning);
 let callByMeaning = require('./routes/callByMeaningRoutes');
 app.use('/cbm', callByMeaning);
 
-app.all('/:anything', (req, res) => {
+app.all('*', (req, res) => {
   res.status(404).send('Hmm... How did you end up here?');
 });
 

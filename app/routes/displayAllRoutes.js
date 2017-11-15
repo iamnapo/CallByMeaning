@@ -41,10 +41,6 @@ router.get('/nodes/names', (req, res) => {
   });
 });
 
-router.all('/nodes/:anything', (req, res) => {
-  return res.status(404).send('Hmm... How did you end up here?');
-});
-
 router.get('/functions', (req, res) => {
   Function.find({}, (err, funcs) => {
     if (err) console.error(err);
@@ -87,10 +83,6 @@ router.get('/functions/descriptions', (req, res) => {
   });
 });
 
-router.all('/functions/:anything', (req, res) => {
-  return res.status(404).send('Hmm... How did you end up here?');
-});
-
 router.get('/relations', (req, res) => {
   Relation.find({}, (err, relations) => {
     if (err) console.error(err);
@@ -106,14 +98,6 @@ router.get('/relations', (req, res) => {
     }
     return res.json(temp);
   });
-});
-
-router.all('/relations/:anything', (req, res) => {
-  return res.status(404).send('Hmm... How did you end up here?');
-});
-
-router.all('/:anything', (req, res) => {
-  return res.status(404).send('Hmm... How did you end up here?');
 });
 
 module.exports = router;
