@@ -2,6 +2,16 @@
 
 const express = require('express');
 const router = new express.Router();
+const multer = require('multer');
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, __dirname + '/../../library');
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  },
+});
+const upload = multer({storage: storage});
 
 const Node = require('../models/node');
 const Function = require('../models/function');
@@ -37,7 +47,7 @@ router.post('/node', (req, res) => {
   });
 });
 
-router.post('/function', (req, res) => {
+router.post('/function', upload.any(), (req, res) => {
   let name = req.body.name;
   let desc = req.body.desc || '';
   let argsNames = req.body.argsNames || [];
@@ -48,7 +58,7 @@ router.post('/function', (req, res) => {
   returnsNames = returnsNames instanceof Object ? returnsNames : returnsNames.split(' ').join('').split(',');
   let returnsUnits = req.body.returnsUnits || [];
   returnsUnits = returnsUnits instanceof Object ? returnsUnits : returnsUnits.split(' ').join('').split(',');
-  let codeFile = req.body.codeFile || './js/default.js';
+  let codeFile = (req.files && req.files[0].originalname) ? req.files[0].originalname : 'default.js';
   Function.findOne({name: name}, (err, func) => {
     if (err) console.error(err);
     if (func) {
@@ -56,7 +66,7 @@ router.post('/function', (req, res) => {
       func.argsUnits = func.argsUnits.concat(argsUnits);
       func.returnsNames = func.returnsNames.concat(returnsNames);
       func.returnsUnits = func.returnsUnits.concat(returnsUnits);
-      if (codeFile !== './js/default.js') func.codeFile = codeFile;
+      if (codeFile !== 'default.js') func.codeFile = codeFile;
       func.markModified('argsNames');
       func.markModified('argsUnits');
       func.markModified('returnsNames');
@@ -65,7 +75,7 @@ router.post('/function', (req, res) => {
       func.save((err, node) => {
         if (err) console.error(err);
       });
-      res.status(200).send('Function added.');
+      return res.status(200).send('Function added.');
     } else {
       Function.create({
         name: name,
