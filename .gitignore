@@ -63,3 +63,6 @@ notes.txt
 
 # Folder specific ESLint ignore
 .eslintignore
+
+# New additions to library/
+library/
