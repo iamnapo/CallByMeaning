@@ -45,8 +45,8 @@ router.get('/f', (req, res) => {
 router.get('/f/:func', (req, res) => {
   Function.findOne({name: req.params.func}).populate('args').populate('results').exec((err, func) => {
     if (err) console.error(err);
-    if (!func) return res.status(418).send('Function not found in DB');
-    return res.json(func);
+    if (func) return res.json(func);
+    return res.status(418).send('Function not found in DB');
   });
 });
 
@@ -57,8 +57,8 @@ router.get('/r', (req, res) => {
 router.get('/r/:rel', (req, res) => {
   Relation.findOne({name: req.params.rel}, (err, rel) => {
     if (err) console.error(err);
-    if (!rel) return res.status(418).send('Relation not found in DB');
-    return res.json(rel);
+    if (rel) return res.json(rel);
+    return res.status(418).send('Relation not found in DB');
   });
 });
 

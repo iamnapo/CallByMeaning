@@ -57,7 +57,7 @@ router.post('/call', (req, res) => {
           };
           return res.json(codeRes);
         }
-        let funcToRun = require('../../library/' + func.codeFile.substring(5));
+        let funcToRun = require('../../library/' + func.codeFile);
         let funcResult = funcToRun(...inputVars);
         return res.send(JSON.stringify(funcResult));
       } else {
@@ -97,7 +97,7 @@ router.post('/call', (req, res) => {
                   }
                 }
               }
-              let funcToRun = require('../../library/' + func.codeFile.substring(5));
+              let funcToRun = require('../../library/' + func.codeFile);
               let funcResult = funcToRun(...correctInputs);
               if (func.returnsUnits[0] === outputUnits[0]) {
                 if (returnCode) {
