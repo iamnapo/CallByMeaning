@@ -17,9 +17,9 @@ mongoose.connect(process.env.ON_HEROKU == 1 ? 'mongodb://admin:'.concat(process.
 mongoose.Promise = global.Promise;
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-app.use('/js', express.static(__dirname + '/../library'));
-app.use('/internal', express.static(__dirname + '/../library/internal'));
-app.use('/docs', express.static(__dirname + '/../docs'));
+app.use('/js', express.static(path.join(__dirname, '../library')));
+app.use('/internal', express.static(path.join(__dirname, '../library/internal')));
+app.use('/docs', express.static(path.join(__dirname, '../docs')));
 let accessLogStream = fs.createWriteStream(path.join(__dirname, '../logs/access.log'), {flags: 'a'});
 app.use(morgan('dev', {stream: accessLogStream}));
 

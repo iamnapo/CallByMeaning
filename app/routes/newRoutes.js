@@ -2,10 +2,11 @@
 
 const express = require('express');
 const router = new express.Router();
+const path = require('path');
 const multer = require('multer');
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, __dirname + '/../../library');
+    cb(null, path.join(__dirname, '../../library'));
   },
   filename: (req, file, cb) => {
     cb(null, file.originalname);
