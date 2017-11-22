@@ -29,14 +29,21 @@ router.post('/call', (req, res) => {
   let inputVars = req.body.inputVars instanceof Object ? req.body.inputVars : req.body.inputVars.split(' ').join('').split(',');
   inputVars = inputVars.map((inputVar) => {
     try {
-      let t = JSON.parse(inputVar);
-      return t;
-    } catch (error) {
+      return JSON.parse(inputVar);
+    } catch (e) {
       return inputVar;
     }
   });
   let outputNodes = req.body.outputNodes instanceof Object ? req.body.outputNodes : req.body.outputNodes.split(' ').join('').split(',');
   let outputUnits = req.body.outputUnits instanceof Object ? req.body.outputUnits : req.body.outputUnits.split(' ').join('').split(',');
+
+  for (let i = 0; i < inputNodes.length; i++) {
+    if (inputUnits[i] == null || inputUnits[i] === '-') inputUnits[i] = inputNodes[i];
+  }
+  for (let i = 0; i < outputNodes.length; i++) {
+    if (outputUnits[i] == null || outputUnits[i] === '-') outputUnits[i] = outputNodes[i];
+  }
+
   if (outputNodes == null || outputNodes.length !== outputUnits.length) {
     return res.status(400).send('A function must have at least one output and every output must have its unit.');
   }
