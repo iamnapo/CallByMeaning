@@ -4,7 +4,7 @@
   "description": "Diploma Thesis",
   "main": "app/index.js",
   "scripts": {
-    "start": "node app/index.js",
+    "start": "nodemon app/index.js -i library/",
     "test": "mocha",
     "initDB": "node app/dev/initDB.js"
   },
@@ -33,12 +33,12 @@
     "multer": "^1.3.0",
     "natural": "^0.5.4",
     "request": "^2.83.0",
+    "shelljs": "^0.7.8",
     "wordpos": "^1.1.5"
   },
   "private": true,
   "devDependencies": {
     "chai": "^4.1.2",
-    "mocha": "^4.0.1",
-    "shelljs": "^0.7.8"
+    "mocha": "^4.0.1"
   }
 }
