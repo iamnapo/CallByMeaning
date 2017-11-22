@@ -6,7 +6,8 @@
   "scripts": {
     "start": "nodemon app/index.js -i library/",
     "test": "mocha",
-    "initDB": "node app/dev/initDB.js"
+    "initDB": "node app/dev/initDB.js",
+    "heroku-prebuild": "npm install nodemon -g"
   },
   "repository": {
     "type": "git",
