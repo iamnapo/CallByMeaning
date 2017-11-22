@@ -40,7 +40,7 @@ router.post('/call', (req, res) => {
   if (outputNodes == null || outputNodes.length !== outputUnits.length) {
     return res.status(400).send('A function must have at least one output and every output must have its unit.');
   }
-  if (inputNodes.length !== inputUnits.length || inputNodes.length !== inputVars.length) {
+  if (inputNodes.length !== inputUnits.length) {
     return res.status(400).send('Input parameters must have the same length.');
   }
   request.post({uri: req.protocol + '://' + req.get('host') + req.originalUrl[0] + 'gbm/search/', form: {inputNodes: inputNodes, outputNodes: outputNodes}}, function(err, response, body) {

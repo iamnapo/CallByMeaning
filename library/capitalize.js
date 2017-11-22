@@ -1,6 +1,3 @@
-var toString = require('./toString'),
-    upperFirst = require('./upperFirst');
-
 'use strict';
 
 /**
@@ -19,8 +16,12 @@ var toString = require('./toString'),
  * _.capitalize('FRED');
  * // => 'Fred'
  */
-function capitalize(string) {
-  return upperFirst(toString(string).toLowerCase());
+function capitalize(str) {
+  str = str.toLowerCase().split(' ');
+  for (let i = 0; i < str.length; i++) {
+    str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
+  }
+  return str.join(' ');
 }
 
 module.exports = capitalize;
