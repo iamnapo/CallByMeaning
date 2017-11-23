@@ -1,7 +1,7 @@
 var baseFlatten = require('./internal/_baseFlatten'),
-    baseOrderBy = require('./internal/_baseOrderBy'),
-    baseRest = require('./internal/_baseRest'),
-    isIterateeCall = require('./internal/_isIterateeCall');
+  baseOrderBy = require('./internal/_baseOrderBy'),
+  baseRest = require('./internal/_baseRest'),
+  isIterateeCall = require('./internal/_isIterateeCall');
 
 'use strict';
 
@@ -15,10 +15,10 @@ var baseFlatten = require('./internal/_baseFlatten'),
  * @memberOf _
  * @since 0.1.0
  * @category Collection
- * @param {Array|Object} collection The collection to iterate over.
- * @param {...(Function|Function[])} [iteratees=[_.identity]]
- *  The iteratees to sort by.
- * @returns {Array} Returns the new sorted array.
+ * @param {array} array The collection to iterate over.
+ * @param {function} function
+ * @author array
+ * @returns {sorted} A sorted array.
  * @example
  *
  * var users = [

@@ -62,10 +62,10 @@ router.post('/function', upload.any(), (req, res) => {
   let codeFile = (req.files && req.files[0].originalname) ? req.files[0].originalname : 'default.js';
 
   for (let i = 0; i < argsNames.length; i++) {
-    if (argsUnits[i] == null || argsUnits[i] === '-') argsUnits[i] = argsNames[i];
+    if (argsUnits[i] == null || argsUnits[i] === '-' || argsUnits[i] === '') argsUnits[i] = argsNames[i];
   }
   for (let i = 0; i < returnsNames.length; i++) {
-    if (returnsUnits[i] == null || returnsUnits[i] === '-') returnsUnits[i] = returnsNames[i];
+    if (returnsUnits[i] == null || returnsUnits[i] === '-' || returnsUnits[i] === '') returnsUnits[i] = returnsNames[i];
   }
 
   Function.findOne({name: name}, (err, func) => {

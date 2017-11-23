@@ -38,10 +38,10 @@ router.post('/call', (req, res) => {
   let outputUnits = req.body.outputUnits instanceof Object ? req.body.outputUnits : req.body.outputUnits.split(' ').join('').split(',');
 
   for (let i = 0; i < inputNodes.length; i++) {
-    if (inputUnits[i] == null || inputUnits[i] === '-') inputUnits[i] = inputNodes[i];
+    if (inputUnits[i] == null || inputUnits[i] === '-' || inputUnits[i] === '') inputUnits[i] = inputNodes[i];
   }
   for (let i = 0; i < outputNodes.length; i++) {
-    if (outputUnits[i] == null || outputUnits[i] === '-') outputUnits[i] = outputNodes[i];
+    if (outputUnits[i] == null || outputUnits[i] === '-' || outputUnits[i] === '') outputUnits[i] = outputNodes[i];
   }
 
   if (outputNodes == null || outputNodes.length !== outputUnits.length) {
