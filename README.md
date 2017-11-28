@@ -15,9 +15,9 @@ npm install
 DB_HOST=mongodb://user:pass@host:port/callbymeaning npm start
 ```
 
-> Default port is 3000 but you can change that by specifying a PORT env variable.
->
-> If mongo is local, you only need to specify the name of the database by using the DB env variable, instead of the DB_HOST.
+Default host is `http://localhost` and port is 3000 but you can change that by specifying a PORT env variable.
+
+If mongo is local, you only need to specify the name of the database by using the DB env variable, instead of the DB_HOST.
 
 ## Unit Tests
 
