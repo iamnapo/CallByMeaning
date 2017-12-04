@@ -7,7 +7,7 @@ const Node = require('../models/node');
 const Function = require('../models/function');
 const Relation = require('../models/relation');
 
-router.get('/', (req, res) => {
+router.all('/', (req, res) => {
   return res.send('Hello.<br> Check <a href=./all/nodes>nodes</a><br>Check <a href=./all/functions>functions</a><br>Check <a href=./all/relations>relations</a>');
 });
 

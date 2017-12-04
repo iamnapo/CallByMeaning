@@ -10,7 +10,7 @@ let functionSchema = new mongoose.Schema({
   desc: String,
   codeFile: {
     type: String,
-    default: './js/default.js',
+    default: 'default.js',
   },
   args: [{
     type: mongoose.Schema.Types.ObjectId,

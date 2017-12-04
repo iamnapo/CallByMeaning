@@ -136,13 +136,13 @@ router.post('/relation', (req, res) => {
   });
 });
 
-router.post('/fix', (req, res) => {
+router.post('/fix', async (req, res) => {
   if (req.body.command === 'fixit') {
-    fix.fixReferences();
-    fix.fixRelations();
+    await fix.fixReferences();
+    await fix.fixRelations();
   }
   if (req.body.command === 'fixtests') {
-    fix.fixTests();
+    await fix.fixTests();
   }
   return res.send('cool bro');
 });

@@ -6,6 +6,7 @@
 const chai = require('chai');
 const assert = chai.assert;
 const request = require('request');
+const JSON = require('../app/dev/jsonfn');
 const server = require('../app/index.js');
 const HOST = 'http://localhost:3000/';
 

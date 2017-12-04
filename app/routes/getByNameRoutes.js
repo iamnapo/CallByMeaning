@@ -9,7 +9,7 @@ const Node = require('../models/node');
 const Function = require('../models/function');
 const Relation = require('../models/relation');
 
-router.get('/', (req, res) => {
+router.all('/', (req, res) => {
   return res.send('Hello. This is the path to search by name. Detailed information can be found <a href=https://github.com/iamnapo/CallByMeaning/>here</a>.<br> Check <a href=./gbn/c>/c/</a><br>Check <a href=./gbn/f>/f/</a><br>Check <a href=./gbn/r>/r/</a>');
 });
 
@@ -25,13 +25,16 @@ router.get('/c/:node', (req, res) => {
     wordpos.lookup(name.replace('_', ' '), (result) => {
       let checked = 0;
       if (result[0] == null) return res.status(418).send('Node not found in DB.');
-      for (node1 of result[0].synonyms) {
+      let allSynonyms = [];
+      for (let res of result) allSynonyms = allSynonyms.concat(res.synonyms);
+      allSynonyms = [...new Set(allSynonyms)];
+      for (node1 of allSynonyms) {
         if (res.headersSent) break;
         Node.findOne({name: node1.replace(/[^\w\d\s]/g, '')}, (err, node2) => {
           checked += 1;
           if (err) console.error(err);
           if (node2) return res.json(node2);
-          if (checked === result[0].synonyms.length && !res.headersSent) return res.status(418).send('Node not found in DB.');
+          if (checked === allSynonyms.length && !res.headersSent) return res.status(418).send('Node not found in DB.');
         });
       }
     });

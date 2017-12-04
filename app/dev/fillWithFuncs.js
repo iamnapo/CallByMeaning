@@ -6,7 +6,7 @@ const Node = require('../models/node');
 const Function = require('../models/function');
 const Relation = require('../models/relation');
 
-function createFuncJSON() {
+async function createFuncJSON() {
   shell.exec('rm -f ./app/dev/funcs.json');
   if (shell.exec('jsdoc ./library -X >> ./app/dev/funcs.json').code !== 0) {
     shell.echo('Error: Could not create .json');
@@ -71,7 +71,7 @@ function getReturns(func) {
   return {names: tempName, units: tempUnit};
 }
 
-function addFuncsToDB(funcProperties) {
+async function addFuncsToDB(funcProperties) {
   for (let func of funcProperties) {
     Function.create({
       name: func.name,
@@ -121,7 +121,7 @@ function getParams(funcs) {
   return temp2;
 }
 
-function addNodesToDB(params) {
+async function addNodesToDB(params) {
   for (let param of params) {
     Node.create({
       name: param.name,
@@ -132,7 +132,7 @@ function addNodesToDB(params) {
   }
 }
 
-function fixNodeInFuncReferences() {
+async function fixNodeInFuncReferences() {
   Node.find({}, function(err, nodes) {
     if (err) console.log(err);
     Function.find({}, function(err, funcs) {
@@ -203,7 +203,7 @@ function fixFuncInNodeReferences() {
   });
 }
 
-function createRelations() {
+async function createRelations() {
   Relation.create({
     name: 'requiredBy',
     desc: 'First node is required to define/give meaning to second node.',
@@ -279,7 +279,7 @@ function createRelations() {
   });
 }
 
-function fixRelations() {
+async function fixRelations() {
   Node.find({}, function(err, nodes) {
     if (err) console.error(err);
     Relation.findOne({name: 'unitConversion'}, (err, relation) => {
@@ -305,7 +305,7 @@ function fixRelations() {
   });
 }
 
-function fixTests() {
+async function fixTests() {
   Node.findOneAndRemove({name: 'Napo'}, (err, node) => {
     if (err) console.error(err);
   });
@@ -320,20 +320,17 @@ function fixTests() {
   });
 }
 
-function fillWithFuncs() {
+async function fillWithFuncs() {
   let funcs = getFunctions();
   let funcProperties = getFuncProperties(funcs);
   let params = getParams(funcs);
-  let funcsTorun = [
-    () => createFuncJSON(),
-    () => addFuncsToDB(funcProperties),
-    () => addNodesToDB(params),
-    () => fixNodeInFuncReferences(),
-    () => createRelations(),
-    () => fixRelations(),
-    () => console.log('DONE!'),
-  ];
-  funcsTorun.forEach((func) => func());
+  await createFuncJSON();
+  await addFuncsToDB(funcProperties);
+  await addNodesToDB(params);
+  await fixNodeInFuncReferences();
+  await createRelations();
+  await fixRelations();
+  console.log('DONE!');
 }
 
 module.exports =

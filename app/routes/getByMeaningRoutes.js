@@ -7,7 +7,7 @@ const JSON = require('../dev/jsonfn');
 
 const Function = require('../models/function');
 
-router.get('/', (req, res) => {
+router.all('/', (req, res) => {
   return res.send('Hello. This is the path to search by meaning. Detailed information can be found <a href=https://github.com/iamnapo/CallByMeaning/>here</a>. Check <a href=../gbm/search>/search</a>');
 });
 

@@ -9,7 +9,7 @@ const JSON = require('../dev/jsonfn');
 const Function = require('../models/function');
 const Relation = require('../models/relation');
 
-router.get('/', (req, res) => {
+router.all('/', (req, res) => {
   return res.send('Hello. This is the path to call a function by meaning. Detailed information can be found <a href=https://github.com/iamnapo/CallByMeaning/>here</a>. Check <a href=../cbm/call>this</a>');
 });
 
