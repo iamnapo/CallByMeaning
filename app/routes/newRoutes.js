@@ -1,9 +1,9 @@
-'use strict';
-
+/* eslint-disable no-param-reassign */
 const express = require('express');
-const router = new express.Router();
 const path = require('path');
 const multer = require('multer');
+
+const router = new express.Router();
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, path.join(__dirname, '../../library'));
@@ -12,7 +12,7 @@ const storage = multer.diskStorage({
     cb(null, file.originalname);
   },
 });
-const upload = multer({storage: storage});
+const upload = multer({ storage });
 
 const Node = require('../models/node');
 const Function = require('../models/function');
@@ -21,36 +21,35 @@ const Relation = require('../models/relation');
 const fix = require('../dev/fillWithFuncs');
 
 router.all('/', (req, res) => {
-  return res.send('Hello. From this path you can add new thing to the DB by sending a POST request to /node, /function or /relation.');
+  res.send('Hello. From this path you can add new thing to the DB by sending a POST request to /node, /function or /relation.');
 });
 
 router.post('/node', (req, res) => {
-  let name = req.body.name;
-  let desc = req.body.desc || '';
+  const name = req.body.name;
+  const desc = req.body.desc || '';
   let units = req.body.units || [];
   units = units instanceof Object ? units : units.split(' ').join('').split(',');
-  Node.findOne({name: name}, (err, node) => {
+  Node.findOne({ name }, (err, node) => {
     if (err) console.error(err);
     if (node) {
       node.units = node.units.concat(units);
       node.markModified('units');
-      node.save((err, node) => {
-        if (err) console.error(err);
+      node.save((err2) => {
+        if (err2) console.error(err2);
       });
       return res.status(200).send('Node added.');
-    } else {
-      Node.create({name: name, desc: desc, units: units}, (err, node) => {
-        if (err) console.error(err);
-        if (node.length !== 0) return res.status(200).send('Node added.');
-        return res.status(418).send('Something went wrong.');
-      });
     }
+    Node.create({ name, desc, units }, (err2, node2) => {
+      if (err2) console.error(err2);
+      if (node2.length !== 0) return res.status(200).send('Node added.');
+      return res.status(418).send('Something went wrong.');
+    });
   });
 });
 
 router.post('/function', upload.any(), (req, res) => {
-  let name = req.body.name;
-  let desc = req.body.desc || '';
+  const name = req.body.name;
+  const desc = req.body.desc || '';
   let argsNames = req.body.argsNames || [];
   argsNames = argsNames instanceof Object ? argsNames : argsNames.split(' ').join('').split(',');
   let argsUnits = req.body.argsUnits || [];
@@ -59,16 +58,16 @@ router.post('/function', upload.any(), (req, res) => {
   returnsNames = returnsNames instanceof Object ? returnsNames : returnsNames.split(' ').join('').split(',');
   let returnsUnits = req.body.returnsUnits || [];
   returnsUnits = returnsUnits instanceof Object ? returnsUnits : returnsUnits.split(' ').join('').split(',');
-  let codeFile = (req.files && req.files[0].originalname) ? req.files[0].originalname : 'default.js';
+  const codeFile = (req.files && req.files[0].originalname) ? req.files[0].originalname : 'default.js';
 
-  for (let i = 0; i < argsNames.length; i++) {
+  for (let i = 0; i < argsNames.length; i += 1) {
     if (argsUnits[i] == null || argsUnits[i] === '-' || argsUnits[i] === '') argsUnits[i] = argsNames[i];
   }
-  for (let i = 0; i < returnsNames.length; i++) {
+  for (let i = 0; i < returnsNames.length; i += 1) {
     if (returnsUnits[i] == null || returnsUnits[i] === '-' || returnsUnits[i] === '') returnsUnits[i] = returnsNames[i];
   }
 
-  Function.findOne({name: name}, (err, func) => {
+  Function.findOne({ name }, (err, func) => {
     if (err) console.error(err);
     if (func) {
       func.argsNames = func.argsNames.concat(argsNames);
@@ -81,36 +80,35 @@ router.post('/function', upload.any(), (req, res) => {
       func.markModified('returnsNames');
       func.markModified('returnsUnits');
       func.markModified('codeFile');
-      func.save((err, node) => {
-        if (err) console.error(err);
+      func.save((err2) => {
+        if (err2) console.error(err2);
       });
       return res.status(200).send('Function added.');
-    } else {
-      Function.create({
-        name: name,
-        desc: desc,
-        argsNames: argsNames,
-        argsUnits: argsUnits,
-        returnsNames: returnsNames,
-        returnsUnits: returnsUnits,
-        codeFile: codeFile,
-      }, (err, func) => {
-        if (err) console.error(err);
-        if (func.length !== 0) return res.status(200).send('Function added.');
-        return res.status(418).send('Something went wrong.');
-      });
     }
+    Function.create({
+      name,
+      desc,
+      argsNames,
+      argsUnits,
+      returnsNames,
+      returnsUnits,
+      codeFile,
+    }, (err2, func2) => {
+      if (err2) console.error(err2);
+      if (func2.length !== 0) return res.status(200).send('Function added.');
+      return res.status(418).send('Something went wrong.');
+    });
   });
 });
 
 router.post('/relation', (req, res) => {
-  let name = req.body.name;
-  let desc = req.body.desc || '';
-  let start = req.body.start || '';
-  let end = req.body.end || '';
-  let mathRelation = req.body.mathRelation || 'start';
-  let connects = start === '' || end === '' ? [] : [{start: {name: start}, end: {name: end}, mathRelation: mathRelation}];
-  Relation.findOne({name: name}, (err, relation) => {
+  const name = req.body.name;
+  const desc = req.body.desc || '';
+  const start = req.body.start || '';
+  const end = req.body.end || '';
+  const mathRelation = req.body.mathRelation || 'start';
+  const connects = start === '' || end === '' ? [] : [{ start: { name: start }, end: { name: end }, mathRelation }];
+  Relation.findOne({ name }, (err, relation) => {
     if (err) console.error(err);
     if (relation) {
       relation.connects = relation.connects.concat(connects);
@@ -119,20 +117,17 @@ router.post('/relation', (req, res) => {
         if (err) console.error(err);
       });
       return res.status(200).send('Relation added.');
-    } else {
-      Relation.create(
-        {
-          name: name,
-          desc: desc,
-          connects: connects,
-          mathRelation: mathRelation,
-        }, (err, relation) => {
-          if (err) console.error(err);
-          if (relation.length !== 0) return res.status(200).send('Relation added.');
-          return res.status(418).send('Something went wrong.');
-        }
-      );
     }
+    Relation.create({
+      name,
+      desc,
+      connects,
+      mathRelation,
+    }, (err2, relation) => {
+      if (err2) console.error(err2);
+      if (relation.length !== 0) return res.status(200).send('Relation added.');
+      return res.status(418).send('Something went wrong.');
+    });
   });
 });
 

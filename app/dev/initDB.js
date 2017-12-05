@@ -1,7 +1,6 @@
-'use strict';
-
 require('dotenv').config();
 const MongoClient = require('mongodb').MongoClient;
+
 const url = 'mongodb://localhost:27017/callbymeaning';
 
 /*
@@ -10,8 +9,13 @@ const url = 'mongodb://localhost:27017/callbymeaning';
  */
 MongoClient.connect(url, (err, db) => {
   if (err) console.error(err);
-  let mongoCommand = {copydb: 1, fromhost: 'localhost', fromdb: 'callbymeaning', todb: process.env.DB};
-  let admin = db.admin();
+  const mongoCommand = {
+    copydb: 1,
+    fromhost: 'localhost',
+    fromdb: 'callbymeaning',
+    todb: process.env.DB,
+  };
+  const admin = db.admin();
   admin.command(mongoCommand, (commandErr, data) => {
     if (!commandErr) {
       console.log(data);

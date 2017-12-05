@@ -1,8 +1,6 @@
-'use strict';
-
 const mongoose = require('mongoose');
 
-let nodeSchema = new mongoose.Schema({
+const nodeSchema = new mongoose.Schema({
   name: {
     type: String,
     unique: true,

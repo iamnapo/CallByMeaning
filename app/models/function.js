@@ -1,8 +1,6 @@
-'use strict';
-
 const mongoose = require('mongoose');
 
-let functionSchema = new mongoose.Schema({
+const functionSchema = new mongoose.Schema({
   name: {
     type: String,
     unique: true,
