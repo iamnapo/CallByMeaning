@@ -133,8 +133,11 @@ router.post('/relation', (req, res) => {
 
 router.post('/fix', async (req, res) => {
   if (req.body.command === 'fixit') {
-    await fix.fixReferences();
-    await fix.fixRelations();
+    try {
+      await fix.fixReferences();
+    } catch (error) {
+      console.error(error);
+    }
   }
   if (req.body.command === 'fixtests') {
     await fix.fixTests();

@@ -39,10 +39,7 @@ function getArgs(func) {
       tempUnit.push(param.type.names[0]);
     });
   }
-  return {
-    names: tempName,
-    units: tempUnit,
-  };
+  return { names: tempName, units: tempUnit };
 }
 
 function getReturns(func) {
@@ -54,10 +51,7 @@ function getReturns(func) {
       tempUnit.push(returns.type.names[0]);
     });
   }
-  return {
-    names: tempName,
-    units: tempUnit,
-  };
+  return { names: tempName, units: tempUnit };
 }
 
 function getFuncProperties(funcs) {
@@ -66,7 +60,7 @@ function getFuncProperties(funcs) {
     temp.push({
       name: func.longname.slice(2),
       desc: replaceAll(func.description, '\n', ' '),
-      codeFile: './js/'.concat(func.meta.filename),
+      codeFile: `./js/'${func.meta.filename}`,
       argsNames: getArgs(func).names,
       argsUnits: getArgs(func).units,
       returnsNames: getReturns(func).names,
@@ -77,19 +71,21 @@ function getFuncProperties(funcs) {
 }
 
 async function addFuncsToDB(funcProperties) {
-  funcProperties.forEach((func) => {
-    Function.create({
-      name: func.name,
-      desc: func.desc,
-      codeFile: func.codeFile,
-      argsNames: func.argsNames,
-      argsUnits: func.argsUnits,
-      returnsNames: func.returnsNames,
-      returnsUnits: func.returnsUnits,
-    }, (err) => {
-      if (err) console.error(err);
-    });
-  });
+  for (const func of funcProperties) {
+    try {
+      await Function.create({
+        name: func.name,
+        desc: func.desc,
+        codeFile: func.codeFile,
+        argsNames: func.argsNames,
+        argsUnits: func.argsUnits,
+        returnsNames: func.returnsNames,
+        returnsUnits: func.returnsUnits,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
 }
 
 function getParams(funcs) {
@@ -125,89 +121,16 @@ function getParams(funcs) {
 }
 
 async function addNodesToDB(params) {
-  params.forEach((param) => {
-    Node.create({
-      name: param.name,
-      desc: param.desc,
-    }, (err) => {
-      if (err) console.error(err);
-    });
-  });
-}
-
-async function fixFuncInNodeReferences() {
-  Node.find({}, (err, nodes) => {
-    if (err) console.log(err);
-    Function.find({}, (err2, funcs) => {
-      if (err2) console.log(err2);
-      nodes.forEach((node) => {
-        funcs.forEach((func) => {
-          for (let i = 0; i < func.argsNames.length; i += 1) {
-            if (func.argsNames[i] === node.name) {
-              node.func_arg.push({ id: func._id, name: func.name, unitType: func.argsUnits[i] });
-              node.units.push(func.argsUnits[i]);
-            }
-          }
-          for (let i = 0; i < func.returnsNames.length; i += 1) {
-            if (func.returnsNames[i] === node.name) {
-              node.func_res.push({ id: func._id, name: func.name, unitType: func.returnsUnits[i] });
-              node.units.push(func.returnsUnits[i]);
-            }
-          }
-        });
-        // eslint-disable-next-line no-param-reassign
-        node.func_arg = node.func_arg.filter((arg) => {
-          const key = `${arg.name} | ${arg.unitType}`;
-          if (!this[key]) {
-            this[key] = true;
-            return true;
-          }
-          return false;
-        }, Object.create(null));
-        // eslint-disable-next-line no-param-reassign
-        node.func_res = node.func_res.filter((arg) => {
-          const key = `${arg.name} | ${arg.unitType}`;
-          if (!this[key]) {
-            this[key] = true;
-            return true;
-          }
-          return false;
-        }, Object.create(null));
-        // eslint-disable-next-line no-param-reassign
-        node.units = node.units.filter((arg) => {
-          if (!this[arg] && !(arg == null)) {
-            this[arg] = true;
-            return true;
-          }
-          return false;
-        }, Object.create(null));
-        node.markModified('func_arg');
-        node.markModified('func_res');
-        node.markModified('units');
-        node.save((err3) => {
-          if (err3) console.error(err3);
-        });
+  for (const param of params) {
+    try {
+      await Node.create({
+        name: param.name,
+        desc: param.desc,
       });
-    });
-  });
-}
-
-async function fixNodeInFuncReferences() {
-  Node.find({}, (err, nodes) => {
-    if (err) console.log(err);
-    Function.find({}, (err2, funcs) => {
-      if (err2) console.log(err2);
-      funcs.forEach((func) => {
-        nodes.forEach((node) => {
-          if (func.argsNames.length > func.args.length && func.argsNames.indexOf(node.name) > -1) func.args.push(node._id);
-          if (func.returnsNames.length > func.returns.length && func.returnsNames.indexOf(node.name) > -1) func.returns.push(node._id);
-        });
-        func.save((err3) => {
-          if (err3) console.error(err3);
-        });
-      });
-    });
-  });
+    } catch (error) {
+      console.error(error);
+    }
+  }
 }
 
 async function createRelations() {
@@ -223,136 +146,123 @@ async function createRelations() {
     name: 'unitConversion',
     desc: 'The two nodes are differents unit of measurement of the same thing.',
   });
-
-  Node.create({
-    name: 'hours',
-    desc: 'Unit of measurement of time.',
-    units: ['hours'],
-  });
-
-  Node.create({
-    name: 'seconds',
-    desc: 'Unit of measurement of time.',
-    units: ['seconds'],
-  });
-
-  Node.create({
-    name: 'milliseconds',
-    desc: 'Unit of measurement of time.',
-    units: ['milliseconds'],
-  });
-
-  // 'unitConversion'
-  Node.findOne({ name: 'hours' }, (err, nodeA) => {
-    if (err) console.log(err);
-    Node.findOne({ name: 'seconds' }, (err2, nodeB) => {
-      if (err2) console.log(err2);
-      Relation.findOne({ name: 'unitConversion' }, (err3, relation) => {
-        if (err3) console.log(err3);
-        relation.connects.push({
-          start: {
-            id: nodeA._id,
-            name: nodeA.name,
-          },
-          end: {
-            id: nodeB._id,
-            name: nodeB.name,
-          },
-          mathRelation: 'start / 60',
-        });
-        relation.connects.push({
-          end: {
-            id: nodeA._id,
-            name: nodeA.name,
-          },
-          start: {
-            id: nodeB._id,
-            name: nodeB.name,
-          },
-          mathRelation: 'start * 60',
-        });
-        relation.save((err4) => {
-          if (err4) console.error(err4);
-        });
-      });
-    });
-    Node.findOne({ name: 'milliseconds' }, (err2, nodeB) => {
-      if (err2) console.log(err2);
-      Relation.findOne({ name: 'unitConversion' }, (err3, relation) => {
-        if (err3) console.log(err3);
-        relation.connects.push({
-          start: {
-            id: nodeA._id,
-            name: nodeA.name,
-          },
-          end: {
-            id: nodeB._id,
-            name: nodeB.name,
-          },
-          mathRelation: 'start / 3600000',
-        });
-        relation.connects.push({
-          end: {
-            id: nodeA._id,
-            name: nodeA.name,
-          },
-          start: {
-            id: nodeB._id,
-            name: nodeB.name,
-          },
-          mathRelation: 'start * 3600000',
-        });
-        relation.save((err4) => {
-          if (err4) console.error(err4);
-        });
-      });
-    });
-  });
 }
 
-async function fixRelations() {
-  Node.find({}, (err, nodes) => {
-    if (err) console.error(err);
-    Relation.findOne({ name: 'unitConversion' }, (err2, relation) => {
-      if (err2) console.error(err2);
-      relation.connects.forEach((connection) => {
-        nodes.forEach((node) => {
-          // eslint-disable-next-line no-param-reassign
-          if (connection.start.name.indexOf(node.name) > -1) connection.start.id = (node._id);
-          // eslint-disable-next-line no-param-reassign
-          if (connection.end.name.indexOf(node.name) > -1) connection.end.id = (node._id);
-        });
-      });
-      // eslint-disable-next-line no-param-reassign
-      relation.connects = relation.connects.filter((conn) => {
-        const key = `${conn.start} | ${conn.end} | ${conn.mathRelation}`;
+async function fixReferences() {
+  // fixNodeInFunc first
+  try {
+    const nodes = await Node.find({});
+    const funcs = await Function.find({});
+    for (const func of funcs) {
+      for (const node of nodes) {
+        if (func.argsNames.length > func.args.length && func.argsNames.indexOf(node.name) > -1) func.args.push(node._id);
+        if (func.returnsNames.length > func.returns.length && func.returnsNames.indexOf(node.name) > -1) func.returns.push(node._id);
+      }
+      try {
+        await func.save();
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  } catch (error) {
+    console.error(error);
+  }
+  // fixFuncInNode
+  try {
+    const nodes = await Node.find({});
+    const funcs = await Function.find({});
+    for (const node of nodes) {
+      for (const func of funcs) {
+        for (let i = 0; i < func.argsNames.length; i += 1) {
+          if (func.argsNames[i] === node.name) {
+            node.func_arg.push({ id: func._id, name: func.name, unitType: func.argsUnits[i] });
+            node.units.push(func.argsUnits[i]);
+          }
+        }
+        for (let i = 0; i < func.returnsNames.length; i += 1) {
+          if (func.returnsNames[i] === node.name) {
+            node.func_res.push({ id: func._id, name: func.name, unitType: func.returnsUnits[i] });
+            node.units.push(func.returnsUnits[i]);
+          }
+        }
+      }
+      let tmp;
+      tmp = node.func_arg.filter((arg) => {
+        const key = `${arg.name}|${arg.unitType}`;
         if (!this[key]) {
           this[key] = true;
           return true;
         }
         return false;
       }, Object.create(null));
-      relation.markModified('connects');
-      relation.save((err3) => {
-        if (err3) console.error(err3);
-      });
-    });
-  });
+      tmp.forEach(el => node.func_arg.pull(el._id));
+      tmp = node.func_res.filter((arg) => {
+        const key = `${arg.name}|${arg.unitType}`;
+        if (!this[key]) {
+          this[key] = true;
+          return true;
+        }
+        return false;
+      }, Object.create(null));
+      tmp.forEach(el => node.func_res.pull(el._id));
+      tmp = node.units.filter((arg) => {
+        if (!this[arg] && !(arg == null)) {
+          this[arg] = true;
+          return true;
+        }
+        return false;
+      }, Object.create(null));
+      tmp.forEach(el => node.units.pull(el));
+      node.markModified('func_arg');
+      node.markModified('func_res');
+      node.markModified('units');
+      try {
+        await node.save();
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  } catch (error) {
+    console.error(error);
+  }
+  // fixRelations
+  try {
+    const nodes = await Node.find({});
+    const relation = await Relation.findOne({ name: 'unitConversion' });
+    for (const connection of relation.connects) {
+      for (const node of nodes) {
+        if (connection.start.name.indexOf(node.name) > -1) connection.start.id = (node._id);
+        if (connection.end.name.indexOf(node.name) > -1) connection.end.id = (node._id);
+      }
+    }
+    relation.connects = relation.connects.filter((conn) => {
+      const key = `${conn.start}|${conn.end}|${conn.mathRelation}`;
+      if (!this[key]) {
+        this[key] = true;
+        return true;
+      }
+      return false;
+    }, Object.create(null));
+    relation.markModified('connects');
+    try {
+      await relation.save();
+    } catch (error) {
+      console.error(error);
+    }
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 async function fixTests() {
-  Node.findOneAndRemove({ name: 'Napo' }, (err) => {
-    if (err) console.error(err);
-  });
-  Node.findOneAndRemove({ name: 'Mary' }, (err) => {
-    if (err) console.error(err);
-  });
-  Function.findOneAndRemove({ name: 'testFunc' }, (err) => {
-    if (err) console.error(err);
-  });
-  Relation.findOneAndRemove({ name: 'testRel' }, (err) => {
-    if (err) console.error(err);
-  });
+  try {
+    await Node.findOneAndRemove({ name: 'Napo' });
+    await Node.findOneAndRemove({ name: 'Mary' });
+    await Function.findOneAndRemove({ name: 'testFunc' });
+    await Relation.findOneAndRemove({ name: 'testRel' });
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 async function fillWithFuncs() {
@@ -362,21 +272,14 @@ async function fillWithFuncs() {
   await createFuncJSON();
   await addFuncsToDB(funcProperties);
   await addNodesToDB(params);
-  await fixNodeInFuncReferences();
-  await fixFuncInNodeReferences();
   await createRelations();
-  await fixRelations();
+  await fixReferences();
   console.log('DONE!');
 }
 
-async function fixReferences() {
-  await fixNodeInFuncReferences();
-  await fixFuncInNodeReferences();
-}
-
-module.exports = {
+module.exports =
+{
   fillWithFuncs,
   fixReferences,
-  fixRelations,
   fixTests,
 };
