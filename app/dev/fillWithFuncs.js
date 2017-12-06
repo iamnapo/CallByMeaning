@@ -135,7 +135,7 @@ async function addNodesToDB(params) {
   });
 }
 
-function fixFuncInNodeReferences() {
+async function fixFuncInNodeReferences() {
   Node.find({}, (err, nodes) => {
     if (err) console.log(err);
     Function.find({}, (err2, funcs) => {
@@ -206,7 +206,6 @@ async function fixNodeInFuncReferences() {
           if (err3) console.error(err3);
         });
       });
-      fixFuncInNodeReferences();
     });
   });
 }
@@ -364,15 +363,20 @@ async function fillWithFuncs() {
   await addFuncsToDB(funcProperties);
   await addNodesToDB(params);
   await fixNodeInFuncReferences();
+  await fixFuncInNodeReferences();
   await createRelations();
   await fixRelations();
   console.log('DONE!');
 }
 
-module.exports =
-{
+async function fixReferences() {
+  await fixNodeInFuncReferences();
+  await fixFuncInNodeReferences();
+}
+
+module.exports = {
   fillWithFuncs,
-  fixReferences: fixNodeInFuncReferences,
+  fixReferences,
   fixRelations,
   fixTests,
 };

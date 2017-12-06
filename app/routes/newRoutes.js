@@ -113,8 +113,8 @@ router.post('/relation', (req, res) => {
     if (relation) {
       relation.connects = relation.connects.concat(connects);
       relation.markModified('connects');
-      relation.save((err, node) => {
-        if (err) console.error(err);
+      relation.save((err2) => {
+        if (err2) console.error(err2);
       });
       return res.status(200).send('Relation added.');
     }
@@ -123,9 +123,9 @@ router.post('/relation', (req, res) => {
       desc,
       connects,
       mathRelation,
-    }, (err2, relation) => {
+    }, (err2, relation2) => {
       if (err2) console.error(err2);
-      if (relation.length !== 0) return res.status(200).send('Relation added.');
+      if (relation2.length !== 0) return res.status(200).send('Relation added.');
       return res.status(418).send('Something went wrong.');
     });
   });
