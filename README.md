@@ -1,4 +1,4 @@
-# CallByMeaning [![Build Status](https://travis-ci.com/iamnapo/CallByMeaning.svg?token=dPuvXqxKaaMT7sVBkN1H&branch=master)](https://travis-ci.com/iamnapo/CallByMeaning)
+# CallByMeaning [![Build Status](https://travis-ci.org/iamnapo/CallByMeaning.svg?branch=master)](https://travis-ci.org/iamnapo/CallByMeaning)
 
 ## Intro
 
@@ -27,4 +27,4 @@ Run tests via the command `npm test`
 
 ## License
 
-[AGPL-3.0 license](https://opensource.org/licenses/AGPL-3.0).
+[AGPL-3.0 license](./LICENSE).
