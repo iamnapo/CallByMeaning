@@ -195,7 +195,9 @@ async function fixReferences() {
         }
         return false;
       }, Object.create(null));
-      tmp.forEach(el => node.func_arg.pull(el._id));
+      while (node.func_arg.length > 0) node.func_arg.pop();
+      tmp.forEach(el => node.func_arg.push(el));
+
       tmp = node.func_res.filter((arg) => {
         const key = `${arg.name}|${arg.unitType}`;
         if (!this[key]) {
@@ -204,15 +206,14 @@ async function fixReferences() {
         }
         return false;
       }, Object.create(null));
-      tmp.forEach(el => node.func_res.pull(el._id));
-      tmp = node.units.filter((arg) => {
-        if (!this[arg] && !(arg == null)) {
-          this[arg] = true;
-          return true;
-        }
-        return false;
-      }, Object.create(null));
-      tmp.forEach(el => node.units.pull(el));
+      while (node.func_res.length > 0) node.func_res.pop();
+      tmp.forEach(el => node.func_res.push(el));
+
+      tmp = node.units.filter((el, pos, arr) => arr.indexOf(el) === pos);
+      tmp.forEach((el) => {
+        node.units.pull(el);
+        node.units.push(el);
+      });
       node.markModified('func_arg');
       node.markModified('func_res');
       node.markModified('units');
