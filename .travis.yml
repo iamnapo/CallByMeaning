@@ -2,8 +2,6 @@ after_script:
 - rm -rf logs
 before_install:
 - npm update -g npm
-before_script:
-- mkdir logs && touch logs/access.log
 cache:
   directories:
   - node_modules

@@ -1,5 +1,7 @@
 # CallByMeaning [![Build Status](https://travis-ci.org/iamnapo/CallByMeaning.svg?branch=master)](https://travis-ci.org/iamnapo/CallByMeaning)
 
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
 ## Intro
 
 Code for the server-side of the CallByMeaning Project. You don't need this package to use the project. You can do so by using [cbm-api](https://github.com/iamnapo/cbm-api).
