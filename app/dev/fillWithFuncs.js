@@ -187,36 +187,33 @@ async function fixReferences() {
         }
       }
       let tmp;
+      let tmpKey = [];
       tmp = node.func_arg.filter((arg) => {
         const key = `${arg.name}|${arg.unitType}`;
-        if (!this[key]) {
-          this[key] = true;
+        if (!tmpKey[key]) {
+          tmpKey[key] = true;
           return true;
         }
         return false;
       }, Object.create(null));
       while (node.func_arg.length > 0) node.func_arg.pop();
       tmp.forEach(el => node.func_arg.push(el));
-
+      tmpKey = [];
       tmp = node.func_res.filter((arg) => {
         const key = `${arg.name}|${arg.unitType}`;
-        if (!this[key]) {
-          this[key] = true;
+        if (!tmpKey[key]) {
+          tmpKey[key] = true;
           return true;
         }
         return false;
       }, Object.create(null));
       while (node.func_res.length > 0) node.func_res.pop();
       tmp.forEach(el => node.func_res.push(el));
-
       tmp = node.units.filter((el, pos, arr) => arr.indexOf(el) === pos);
       tmp.forEach((el) => {
         node.units.pull(el);
         node.units.push(el);
       });
-      node.markModified('func_arg');
-      node.markModified('func_res');
-      node.markModified('units');
       try {
         await node.save();
       } catch (error) {
@@ -236,10 +233,11 @@ async function fixReferences() {
         if (connection.end.name.indexOf(node.name) > -1) connection.end.id = (node._id);
       }
     }
+    const tmpKey = [];
     relation.connects = relation.connects.filter((conn) => {
       const key = `${conn.start}|${conn.end}|${conn.mathRelation}`;
-      if (!this[key]) {
-        this[key] = true;
+      if (!tmpKey[key]) {
+        tmpKey[key] = true;
         return true;
       }
       return false;

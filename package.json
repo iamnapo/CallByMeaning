@@ -5,7 +5,7 @@
   "main": "app/index.js",
   "scripts": {
     "start": "node app/index.js",
-    "test": "mocha",
+    "test": "jest",
     "initDB": "node app/dev/initDB.js"
   },
   "repository": {
@@ -37,8 +37,7 @@
     "wordpos": "^1.1.5"
   },
   "devDependencies": {
-    "chai": "^4.1.2",
-    "mocha": "^4.0.1"
+    "jest": "^21.2.1"
   },
   "engines": {
     "node": "^9.2.0",
