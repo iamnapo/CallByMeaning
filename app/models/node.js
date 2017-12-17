@@ -23,6 +23,6 @@ const nodeSchema = new mongoose.Schema({
     name: String,
     unitType: String,
   }],
-});
+}, { usePushEach: true });
 
 module.exports = mongoose.model('Node', nodeSchema);

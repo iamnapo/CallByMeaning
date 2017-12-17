@@ -23,6 +23,6 @@ const relationSchema = new mongoose.Schema({
     },
     mathRelation: String,
   }],
-});
+}, { usePushEach: true });
 
 module.exports = mongoose.model('Relation', relationSchema);

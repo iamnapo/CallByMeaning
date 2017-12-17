@@ -22,6 +22,6 @@ const functionSchema = new mongoose.Schema({
   argsUnits: [],
   returnsNames: [],
   returnsUnits: [],
-});
+}, { usePushEach: true });
 
 module.exports = mongoose.model('Function', functionSchema);
