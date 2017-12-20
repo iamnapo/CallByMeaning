@@ -1,3 +1,5 @@
+# __ARCHIVED__. Check [cbmjs/CallByMeaning](https://github.com/cbmjs/CallByMeaning)
+
 # CallByMeaning [![Build Status](https://travis-ci.org/iamnapo/CallByMeaning.svg?branch=master)](https://travis-ci.org/iamnapo/CallByMeaning)
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
